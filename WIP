@@ -1,0 +1,21 @@
+<#cd FILEPATH
+Function ExcelToCsv ($File) {
+    $myDir = get-location
+    $excelFile = "$myDir\" + $File + ".xlsx"
+    $Excel = New-Object -ComObject Excel.Application
+    $wb = $Excel.Workbooks.Open($excelFile)
+	
+    foreach ($ws in $wb.Worksheets) {
+        $ws.SaveAs("$myDir\" + $File + ".csv", 6)
+    }
+    $Excel.Quit()
+}
+
+$FileName = "FILE"
+ExcelToCsv -File $FileName
+$import = import-csv FILEPATH
+$column = "column"* 
+$import.$column
+
+exit
+#>
