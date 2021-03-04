@@ -1,0 +1,107 @@
+$Type = @()
+$IP = @()
+$Content = @()
+$File = "FILEPATH HERE"
+$count = 0 ##Increments by one for each line in file## 
+
+
+##FUNCTIONS DECLARED HERE##
+<#
+function IP{
+  $IP = $Content
+}
+
+function attachment{
+  $Content += $file[$count].indicator
+}
+
+function authentihash{
+  $Content += $file[$count].indicator
+}
+
+function btc{
+  $Content += $file[$count].indicator
+}
+
+function domain{
+  $Content += $file[$count].indicator
+}
+
+function domain|ip{
+  $Content += $file[$count].indicator
+  ##Regex match ip and input to $IP somehow##
+}
+
+function email-attachment{
+  $Content += $file[$count].indicator
+}
+
+function email-dst{
+  $Content += $file[$count].indicator
+}
+
+function email-dst-display-name{
+  $Content += $file[$count].indicator
+}
+
+function email-message-ip{
+  $Content += $file[$count].indicator
+}
+
+function email-reply-to{
+  $Content += $file[$count].indicator
+}
+
+function email-src{
+  $Content += $file[$count].indicator
+}
+
+function email-src-display-name{
+  $Content += $file[$count].indicator
+}
+
+function email-subject{
+  $Content += $file[$count].indicator
+}
+
+function filename{
+  $Content += $file[$count].indicator
+}
+
+function filename|authentihash{
+  $Content += $file[$count].indicator
+}
+
+
+#>
+<#
+##LOGIC FOR ITERATING THROUGH THE CSV HERE##
+
+if ($Type -eq "ip_address"){
+    Type-IP()
+}
+
+
+function hash {
+  #Includes md5, sha1, etc.
+
+}
+
+function snort {
+  $value -replace "\{(.*)sid:([0-9]*);(.*)\}",'\{\1sid:' + [regex]::escape($SID) + ';\3\}' >> $savedrules\rules.rules
+  $SID++
+  #Add message line as well...
+}
+
+function yara {
+  echo "$value + //$attribute_tag" >> $savedrules\yararules
+  #Fix comments
+  $SID++
+}
+
+function bro{
+  #Break out the query sections and input into suricata rule
+  echo "alert $id.orig_h $id.orig_p <> $id.resp_h id.resp_p (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $savedrules\rules.rules
+}
+
+#>

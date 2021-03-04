@@ -1,0 +1,63 @@
+#Script-Scratch I was taking bath...
+$filepath = read-host "Input full filepath of CSV: "
+$savedrules = read-host "Input full filepath to where you want to save your rules: "
+
+
+##FILE CHARACTER NORMALIZATION##
+function normalize{
+  $normalize = get-content $filepath
+  $normalize -replace ':',"."|set-content -path $filepath
+
+  $normalize2 = get-content $filepath
+  $normalize2 -replace ';',"."|set-content -path $filepath
+
+  $normalize3 = get-content $filepath
+  $normalize3 -replace "'|'","."|set-content -path $filepath
+}
+normalize()
+
+
+##Operation Functions##
+function Type{
+  $Type = @()
+  $IP = "ANY" ##IP ONLY CHANGES IF TYPE IS AN IP ADDRESS!!##
+  $Type += $file[$count].type
+}
+
+function Content
+
+##RULE GENERATION BEGINS HERE##
+$file = import-csv $filepath
+$SID = 1000000
+$count = 0
+$length = $file.length
+
+while ($count -lt $length){
+  $Content = @()
+  $Message = @()
+  $Reference = @()
+  $Classtype = @()
+
+  
+  $Content += $file[$count].indicator
+  $Message += $file[$count].type 
+  $Message += $file[$count].actors
+  $Reference += $file[$count].malware_families
+  $Reference += $file[$count].published_date
+  $Reference += $file[$count].reports
+  $Classtype += $file[$count].malicious_confidence
+  $Classtype += $file[$count].labels
+
+  if ($Type -eq "ip_address"){
+    $IP = $Content
+  }
+
+  echo "alert $IP ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $savedrules\rules.rules
+
+  $SID += 10
+  $count += 1
+
+}
+  echo "Finished."
+  exit
+  
