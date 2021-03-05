@@ -91,6 +91,7 @@ function hash {
 }
 
 function snort {
+  $indicator -replace " \\ \n", " "
   $indicator -replace "\{(.*)sid:([0-9]*);(.*)\}",'\{\1sid:' + [regex]::escape($SID) + ';\3\}' >> $savedrules\rules.rules
   $SID++
   $count++
@@ -101,28 +102,25 @@ function snort {
 function yara {
   echo "$indicator + //$attribute_tag" >> $savedrules\yararules
   #Fix comments
-  $SID++
   $count++
   Write-Host "$count"
 }
 
 function regkey {
   echo "$indicator + //$attribute_tag" >> $savedrules\hidsrules
-  $SID++
   $count++
   Write-Host "$count"
 }
 
 function "regkey | value" {
   echo "$indicator + //$attribute_tag" >> $savedrules\hidsrules
-  $SID++
   $count++
   Write-Host "$count"
 }
 
 function bro {
   #Break out the query sections and input into suricata rule
-  echo "alert $id.orig_h $id.orig_p <> $id.resp_h $id.resp_p (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $savedrules\rules.rules
+  echo "alert $id.orig_h $id.orig_p <> $id.resp_h $id.resp_p (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $savedrules\garbagecan.rules
   $SID++
   $count++
   Write-Host "$count"

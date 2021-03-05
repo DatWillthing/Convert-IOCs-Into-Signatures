@@ -1,0 +1,43 @@
+Set-Variable -Name "File" -Value "$args" -Scope global
+$FileExten=[System.IO.Path]::GetExtension("$File")
+$FileName=[System.IO.Path]::GetFileNameWithoutExtension("$File")
+$FilePath=[System.IO.Path]::GetDirectoryName("$File")
+$ScriptPath=$PSScriptRoot + "\"
+$ResultsPath=$ScriptPath + "Results\"
+Function Detect-Filetype {
+	if ($FileExten -eq ".xlsx") {
+		write-host "Excel!!"
+		#Excel-File($File)
+	}
+	elseif ($FileExten -eq ".csv") {
+		write-host "CSV yes, please!!"
+		#Check-Headers
+	}
+	elseif ($FileExten -eq "") {
+		write-host "I did not detect a file extension..."
+	}
+	else {
+		write-host "Something didn't work..."
+	}
+}
+
+Function Excel-File ($File) {
+    $Excel = New-Object -ComObject Excel.Application
+    $wb = $Excel.Workbooks.Open($File)
+    foreach ($ws in $wb.Worksheets) {
+        $ws.SaveAs($FilePath + "\" + $FileName + ".csv", 6)
+		$File = "$FilePath" + "\" + "$FileName" + ".csv"
+		write-host="$File"
+    }
+    $Excel.Quit()
+	write-host "`$File = $File"
+	Detect-Filetype
+}
+
+Function Prep-Results {
+	New-Item -Name "Results" -ItemType Directory -Path $ScriptPath
+	#Edit permissions?
+}
+Detect-Filetype
+Prep-Results
+write-host "done"
