@@ -3,16 +3,19 @@ $filepath = read-host "Input full filepath of CSV: "
 $savedrules = read-host "Input full filepath to where you want to save your rules: "
 
 
+
 ##FILE CHARACTER NORMALIZATION##
 function normalize{
   $normalize = get-content $filepath
   $normalize -replace ':',"."|set-content -path $filepath
+  #Does this ^ command need an escape character before the period??? I think replace uses regex...#
 
   $normalize2 = get-content $filepath
   $normalize2 -replace ';',"."|set-content -path $filepath
 
   $normalize3 = get-content $filepath
   $normalize3 -replace "'|'","."|set-content -path $filepath
+  ###IF THE TYPE FIELD HAS A PIPE, THEN THE INDICATOR/VALUE FIELD WILL HAVE ONE TOO. CHANGE BOTH OF THE PIPES TO COMMAS (or maybe a - or _) AND TREAT THEM AS TWO FIELDS FOR FURTHER PROCESSING (or whateva)###
 }
 normalize()
 

@@ -3,12 +3,15 @@ $IP = @()
 $Content = @()
 $File = "FILEPATH HERE"
 $count = 0 ##Increments by one for each line in file## 
-
+$indicator = $value
+$Message = $attribute_tag
 
 ##FUNCTIONS DECLARED HERE##
 <#
-function IP{
-  $IP = $Content
+function IP {
+  echo "alert $IP ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $savedrules\rules.rules
+  $Content += "$IP;"
+  echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $savedrules\rules.rules
 }
 
 function attachment{
@@ -72,8 +75,8 @@ function filename|authentihash{
   $Content += $file[$count].indicator
 }
 
-
 #>
+
 <#
 ##LOGIC FOR ITERATING THROUGH THE CSV HERE##
 
@@ -88,20 +91,108 @@ function hash {
 }
 
 function snort {
-  $value -replace "\{(.*)sid:([0-9]*);(.*)\}",'\{\1sid:' + [regex]::escape($SID) + ';\3\}' >> $savedrules\rules.rules
+  $indicator -replace "\{(.*)sid:([0-9]*);(.*)\}",'\{\1sid:' + [regex]::escape($SID) + ';\3\}' >> $savedrules\rules.rules
   $SID++
+  $count++
+  Write-Host "$count"
   #Add message line as well...
 }
 
 function yara {
-  echo "$value + //$attribute_tag" >> $savedrules\yararules
+  echo "$indicator + //$attribute_tag" >> $savedrules\yararules
   #Fix comments
   $SID++
+  $count++
+  Write-Host "$count"
 }
 
-function bro{
+function regkey {
+  echo "$indicator + //$attribute_tag" >> $savedrules\hidsrules
+  $SID++
+  $count++
+  Write-Host "$count"
+}
+
+function "regkey | value" {
+  echo "$indicator + //$attribute_tag" >> $savedrules\hidsrules
+  $SID++
+  $count++
+  Write-Host "$count"
+}
+
+function bro {
   #Break out the query sections and input into suricata rule
-  echo "alert $id.orig_h $id.orig_p <> $id.resp_h id.resp_p (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $savedrules\rules.rules
+  echo "alert $id.orig_h $id.orig_p <> $id.resp_h $id.resp_p (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $savedrules\rules.rules
+  $SID++
+  $count++
+  Write-Host "$count"
 }
 
 #>
+<#
+whois-registrant-email
+domain
+domain|ip
+x509-fingerprint-sha1
+ip-dst
+url
+filename
+sha256
+ip-src
+md5
+ssdeep
+filename|md5
+filename|sha1
+filename|sha256
+regkey|value
+email-src
+sha1
+snort
+yara
+link
+hostname
+pattern-in-file
+threat-actor
+email-subject
+sha512
+mutex
+pdb
+filename|imphash
+http-method
+authentihash
+imphash
+ip-dst|port
+sha384
+email-dst
+filename|sha512
+malware-sample
+email-attachment
+pattern-in-memory
+uri
+user-agent
+other
+text
+mobile-application-id
+attachment
+email-src-display-name
+regkey
+windows-service-name
+filename|authentihash
+btc
+windows-scheduled-task
+filename|ssdeep
+pattern-in-traffic
+named pipe
+email-dst-display-name
+sha224
+email-reply-to
+jabber-id
+github-username
+ip-src|port
+bro
+email-message-id
+size-in-bytes
+malware-type
+port
+#>
+

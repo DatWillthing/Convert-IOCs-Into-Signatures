@@ -19,3 +19,15 @@ $import.$column
 
 exit
 #>
+<#
+Can we make it run where you do the script with the file after it?
+  In the powershell console...
+    CreateSignatures.ps1 <file>
+  #basically you can drag and drop the file here and the whole path should show up
+  #basically your script would be shortened to:
+    $File = "$1"
+  #this is because the dropped file is considered arguement 1
+  #After that, detect the file extension...
+  #if there is .xlsx then do the excel shit
+  #if it is CSV, then good to go 
+#>
