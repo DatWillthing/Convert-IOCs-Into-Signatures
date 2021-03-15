@@ -1,3 +1,16 @@
+$indicator = $file[$count].indicator
+$type = $Content += $file[$count].type
+
+
+##All in one hash function, regex matches types and sorts based off that##
+
+
 function hash{
+  $Content += $indicator - match "|^"
+  if ($type -match "IP|^") {
+      $content += $indicator - match "^|"
+   }
   
 }
+
+##WORK IN PROGRESS DO NOT EXPECT TO WORK YET!!!##
