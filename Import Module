@@ -10,9 +10,15 @@ Function hash{
    }
 }
 
-function type{
 
+##Main work function, iterates through every type and sorts based on that##
+function TypeFunction{
+  if ($type -eq ip-src){
+    $IP-SRC = $Content
+  }
 }
+
+
 
 
 ##Detects filetypes other than CSV##
