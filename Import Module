@@ -10,13 +10,32 @@ Function hash{
    }
 }
 
+##Sorts data based on header##
+function Sort{
+   $Type += $file[$count].type
+   $Content += $file[$count].indicator
+   $Message += $file[$count].type 
+   $Message += $file[$count].actors
+   $Reference += $file[$count].malware_families
+   $Reference += $file[$count].published_date
+   $Reference += $file[$count].reports  
+   $Classtype += $file[$count].malicious_confidence
+   $Classtype += $file[$count].label
+}
 
 ##Main work function, iterates through every type and sorts based on that##
 function TypeFunction{
   if ($type -eq ip-src){
+    Sort()
     $IP-SRC = $Content
-  }
+   }
+   if ($type -eq ip-dst){
+    Sort()
+    $IP-DST = $Content
+   }
 }
+}
+
 
 
 
