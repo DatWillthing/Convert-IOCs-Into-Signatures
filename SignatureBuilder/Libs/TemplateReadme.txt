@@ -1,15 +1,15 @@
 0000000000000000000000000000000000000000000000000000000000000000000000
 `n00                                                   00
-`n00 Total number of signatures produced by the script 00 $TotalSigs
+`n00 Total number of signatures produced by the script 00   $TotalSigs
 `n00                                                   00
 `n0000000000000000000000000000000000000000000000000000000000000000000000
-`n00 Total hash signatures produced by the script      00 $TotalHashes
+`n00 Total hash signatures produced by the script      00   $TotalHashes
 `n0000000000000000000000000000000000000000000000000000000000000000000000
-`n00 Total IP signatures produced by the script        00 $TotalIPs
+`n00 Total IP signatures produced by the script        00   $TotalIPs
 `n0000000000000000000000000000000000000000000000000000000000000000000000
-`n00 Total indicators not processed by the script      00 $TotalSkips
+`n00 Total indicators not processed by the script      00   $TotalSkips
 `n0000000000000000000000000000000000000000000000000000000000000000000000
-`n00 The Suricata SID range used is: $FirstSID - $LastSID
+`n00 The Suricata SID range used is:   $FirstSID - $LastSID
 `n0000000000000000000000000000000000000000000000000000000000000000000000
 `n00
 `n0000 Instructions 00000
