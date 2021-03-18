@@ -11,7 +11,7 @@ $FileName=[System.IO.Path]::GetFileNameWithoutExtension("$File")
 $FilePath=[System.IO.Path]::GetDirectoryName("$File")
 $ResultsPath=Join-Path -Path $PSScriptRoot -ChildPath "Results"
 $LibsPath=Join-Path -Path $PSScriptRoot -ChildPath "Libs"
-$TempReadmePath=Join-Path -Path $LibsPath -ChildPath "Temp-Readme.txt"
+$TempReadmePath=Join-Path -Path $LibsPath -ChildPath "TemplateReadme.txt"
 $ReadmePath=Join-Path -Path $ResultsPath -ChildPath "Readme.txt"
 Function Detect-Filetype {
     if ($FileExten -eq ".xlsx") {
