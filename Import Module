@@ -1,0 +1,13 @@
+##This file is the import module for the suricata script, all repetitive functions go in here to keep the main script clean##
+###ADD WORKING FUNCTIONS HERE###
+
+function hash{
+  $Content += $indicator | select-string -pattern "|^"
+  if ($type -match "IP|*") {
+      $content += $indicator | select-string -pattern "^|" 
+   }
+}
+
+function type{
+
+}
