@@ -2,10 +2,10 @@
 $file = read-host "Input full path to file: "
 
 ##Convert invalid filetypes to csv##
-(XLSX DETECTION)
+(XLSX DETECTION HERE)
 
 ##If invalid header detected, replace with valid ones##
-(CHARACTER NORMALIZATION)
+(CHARACTER NORMALIZATION HERE)
 
 ##Functions Declaration##
 function TypeFunction{
