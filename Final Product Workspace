@@ -17,7 +17,8 @@ $length = $file.length
 
 ##Iterates through the file and writes pertinent info to suricata rules##
 while ($count -lt $length){
-  $IP = "ANY" ##IP ONLY CHANGES IF TYPE IS AN IP ADDRESS!!##
+  $IP-SRC = "ANY" 
+  $IP-DST = "ANY"
   $Type = @()
   $Content = @()
   $Message = @()
@@ -26,7 +27,7 @@ while ($count -lt $length){
   
   TypeFunction()
   
-  echo "alert $IP ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $savedrules\rules.rules
+  echo "alert $IP-SRC ANY <> $IP-DST ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $savedrules\rules.rules
   $SID += 10
   $count += 1
 }
