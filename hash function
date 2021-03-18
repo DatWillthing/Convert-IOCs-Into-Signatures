@@ -6,9 +6,9 @@ $type = $Content += $file[$count].type
 
 
 function hash{
-  $Content += $indicator - match "|^"
-  if ($type -match "IP|^") {
-      $content += $indicator - match "^|"
+  $Content += $indicator | select-string -pattern "|^"
+  if ($type -match "IP|*") {
+      $content += $indicator | select-string -pattern "^|" 
    }
   
 }
