@@ -6,13 +6,13 @@ Set-Variable -Name "TotalSkips" -Value "0" -Scope global
 Set-Variable -Name "FirstSID" -Value "700000" -Scope global
 Set-Variable -Name "LastSID" -Value "700000" -Scope global
 Set-Variable -Name "OutputName" -Value "NotSureYet" -Scope global
-$FileExten=[System.IO.Path]::GetExtension("$File")
-$FileName=[System.IO.Path]::GetFileNameWithoutExtension("$File")
-$FilePath=[System.IO.Path]::GetDirectoryName("$File")
-$ResultsPath=Join-Path -Path $PSScriptRoot -ChildPath "Results"
-$LibsPath=Join-Path -Path $PSScriptRoot -ChildPath "Libs"
-$TempReadmePath=Join-Path -Path $LibsPath -ChildPath "TemplateReadme.txt"
-$ReadmePath=Join-Path -Path $ResultsPath -ChildPath "Readme.txt"
+$global:FileExten=[System.IO.Path]::GetExtension("$File")
+$global:FileName=[System.IO.Path]::GetFileNameWithoutExtension("$File")
+$global:FilePath=[System.IO.Path]::GetDirectoryName("$File")
+$global:ResultsPath=Join-Path -Path $PSScriptRoot -ChildPath "Results"
+$global:LibsPath=Join-Path -Path $PSScriptRoot -ChildPath "Libs"
+$global:TempReadmePath=Join-Path -Path $LibsPath -ChildPath "TemplateReadme.txt"
+$global:ReadmePath=Join-Path -Path $ResultsPath -ChildPath "Readme.txt"
 Function Detect-Filetype {
     if ($FileExten -eq ".xlsx") {
         write-host "Excel!!"
