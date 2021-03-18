@@ -1,0 +1,39 @@
+##Roadmap for the working script, use as a framework to build upon##
+$file = read-host "Input full path to file: "
+
+##Convert invalid filetypes to csv##
+(XLSX DETECTION)
+
+##If invalid header detected, replace with valid ones##
+(CHARACTER NORMALIZATION)
+
+##Functions Declaration##
+function TypeFunction{
+  ##Sort the various types where they need to go##
+}
+function hash{
+  $Content += $indicator | select-string -pattern "|^"
+  if ($type -match "IP|*") {
+      $content += $indicator | select-string -pattern "^|" 
+      ##WILL ADD MORE TYPES LATER, THIS IS A PROOF OF CONCEPT!!##
+   } 
+}
+
+
+##Variable Declaration##
+$SID = 1000000
+$count = 0
+$length = $file.length
+
+##Iterates through the file and writes pertinent info to suricata rules##
+while ($count -lt $length){
+  $IP = "ANY" ##IP ONLY CHANGES IF TYPE IS AN IP ADDRESS!!##
+  $Type = @()
+  $Content = @()
+  $Message = @()
+  $Reference = @()
+  $Classtype = @()
+  
+  TypeFunction()
+  
+}
