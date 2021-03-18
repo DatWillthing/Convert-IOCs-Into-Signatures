@@ -1,24 +1,14 @@
+##Import functions module##
+(MODULE IMPORT HERE)
+
 ##Roadmap for the working script, use as a framework to build upon##
 $file = read-host "Input full path to file: "
 
 ##Convert invalid filetypes to csv##
-(XLSX DETECTION HERE)
+XLSXnormalize()
 
 ##If invalid header detected, replace with valid ones##
-(CHARACTER NORMALIZATION HERE)
-
-##Functions Declaration##
-function TypeFunction{
-  ##Sort the various types where they need to go##
-}
-function hash{
-  $Content += $indicator | select-string -pattern "|^"
-  if ($type -match "IP|*") {
-      $content += $indicator | select-string -pattern "^|" 
-      ##WILL ADD MORE TYPES LATER, THIS IS A PROOF OF CONCEPT!!##
-   } 
-}
-
+normalization()
 
 ##Variable Declaration##
 $SID = 1000000
@@ -36,4 +26,7 @@ while ($count -lt $length){
   
   TypeFunction()
   
+  echo "alert $IP ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $savedrules\rules.rules
+  $SID += 10
+  $count += 1
 }
