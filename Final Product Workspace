@@ -6,8 +6,7 @@
 $file = read-host "Input full path to file: "
 
 ##Convert invalid filetypes to csv##
-StripExcelHeader()
-XLSXnormalize()
+normalizefile()
 
 ##If invalid header detected, replace with valid ones##
 normalization()
