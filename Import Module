@@ -5,11 +5,13 @@
 function Sort{
    $Type += $file[$count].type
    $Content += $file[$count].indicator
+   $Content += $file[$count].value
    $Message += $file[$count].type 
    $Message += $file[$count].actors
    $Reference += $file[$count].malware_families
    $Reference += $file[$count].published_date
    $Reference += $file[$count].reports  
+   $Reference += $file[$count].attribute_tag
    $Classtype += $file[$count].malicious_confidence
    $Classtype += $file[$count].label
 }
@@ -26,6 +28,10 @@ Function hash{
 
 ##Main work function, iterates through every type and sorts based on that##
 function TypeFunction{
+  if ($type -eq ip_address){
+    Sort()
+    $IP-SRC = $Content
+   }
   if ($type -eq ip-src){
     Sort()
     $IP-SRC = $Content
@@ -34,7 +40,6 @@ function TypeFunction{
     Sort()
     $IP-DST = $Content
    }
-}
 }
 
 
