@@ -65,6 +65,7 @@ Function Detect-Filetype {
 Function Detect-Filetype {
     if ($FileExten -eq ".xlsx") {
         write-host "Excel!!"
+        #StripExcelHeader()
         #Excel-File($File)
     }
     elseif ($FileExten -eq ".csv") {
@@ -101,6 +102,9 @@ Function Build-Results {
     $TemplateContent = get-content -path $TempReadmePath
     Invoke-expression """$TemplateContent""" | set-content -path $ReadmePath
 }
-#Detect-Filetype
-Build-Results
-write-host "done"
+
+function normalizefile{
+   Detect-Filetype()
+}
+
+
