@@ -1,15 +1,6 @@
 ##This file is the import module for the suricata script, all repetitive functions go in here to keep the main script clean##
 ###ADD WORKING FUNCTIONS HERE###
 
-
-##Detects hashes in the type field and outputs accordingly##
-Function hash{
-  $Content += $indicator | select-string -pattern "|^"
-  if ($type -match "IP|*") {
-      $content += $indicator | select-string -pattern "^|" 
-   }
-}
-
 ##Sorts data based on header##
 function Sort{
    $Type += $file[$count].type
@@ -22,6 +13,16 @@ function Sort{
    $Classtype += $file[$count].malicious_confidence
    $Classtype += $file[$count].label
 }
+
+
+##Detects hashes in the type field and outputs accordingly##
+Function hash{
+  $Content += $indicator | select-string -pattern "|^"
+  if ($type -match "IP|*") {
+      $content += $indicator | select-string -pattern "^|" 
+   }
+}
+
 
 ##Main work function, iterates through every type and sorts based on that##
 function TypeFunction{
@@ -41,6 +42,26 @@ function TypeFunction{
 
 
 ##Detects filetypes other than CSV##
+Function Detect-Filetype {
+    if ($FileExten -eq ".xlsx") {
+        write-host "Excel!!"
+        #Excel-File($File)
+    }
+    elseif ($FileExten -eq ".csv") {
+        write-host "CSV yes, please!!"
+        #Check-Headers
+    }
+    elseif ($FileExten -eq "") {
+        write-host "I did not detect a file extension..."
+    }
+    else {
+        write-host "Something didn't work..."
+    }
+}
+
+
+
+
 Function Detect-Filetype {
     if ($FileExten -eq ".xlsx") {
         write-host "Excel!!"
