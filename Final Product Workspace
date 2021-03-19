@@ -8,9 +8,6 @@ $file = read-host "Input full path to file: "
 ##Convert invalid filetypes to csv##
 normalizefile()
 
-##If invalid header detected, replace with valid ones##
-normalization()
-
 ##Variable Declaration##
 $count = 0
 $length = $file.length
