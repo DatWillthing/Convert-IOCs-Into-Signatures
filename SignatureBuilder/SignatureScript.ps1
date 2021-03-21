@@ -2,8 +2,8 @@ Set-Variable -Name "File" -Value "$args" -Scope global
 
 <#
 if ($File -eq "") {
-    #Ask for the File name
-    }
+    $File = read-host "Input the full path to the signature file: "
+}
 
 #>
 
