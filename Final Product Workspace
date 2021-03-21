@@ -3,7 +3,7 @@
 ##Import functions module##
 (MODULE IMPORT HERE)
 
-$file = read-host "Input full path to file: "
+$file = read-host "Input full path to the input file: "
 
 ##Convert invalid filetypes to csv##
 normalizefile()
@@ -20,7 +20,7 @@ $TotalIPs = 0
 $TotalSkips = 0
 $FirstSID = 700000
 $LastSID = 700000
-$OutputName = "NotSureYet.rules"
+$OutputName = "NotSureYet"
 
 ##Iterates through the file and writes pertinent info to suricata rules##
 while ($count -lt $length){
