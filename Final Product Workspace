@@ -3,7 +3,7 @@
 ##Import functions module##
 (MODULE IMPORT HERE)
 
-$file = read-host "Input full path to the input file: "
+$file = read-host "Input the full path to the signature file: "
 
 ##Convert invalid filetypes to csv##
 normalizefile()
