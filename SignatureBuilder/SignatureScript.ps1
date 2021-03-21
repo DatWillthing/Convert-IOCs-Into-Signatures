@@ -54,7 +54,7 @@ Function Excel-File ($File) {
 }
 
 Function Build-Results {
-    New-Item -Name "Results" -ItemType Directory -Path $PSScriptRoot
+    New-Item -Name "Results" -ItemType Directory -Path $PSScriptRoot -erroraction 'silentlycontinue'
     #Edit permissions?
     New-Item -Name "Readme.txt" -ItemType File -Path $ResultsPath
     $TemplateContent = get-content -path $TempReadmePath
