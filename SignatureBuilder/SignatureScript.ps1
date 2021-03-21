@@ -1,4 +1,12 @@
 Set-Variable -Name "File" -Value "$args" -Scope global
+
+<#
+if ($File -eq "") {
+    #Ask for the File name
+    }
+
+#>
+
 Set-Variable -Name "TotalSigs" -Value "0" -Scope global
 Set-Variable -Name "TotalHashes" -Value "0" -Scope global
 Set-Variable -Name "TotalIPs" -Value "0" -Scope global
