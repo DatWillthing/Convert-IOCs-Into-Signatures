@@ -21,6 +21,7 @@ $global:ResultsPath=Join-Path -Path $PSScriptRoot -ChildPath "Results"
 $global:LibsPath=Join-Path -Path $PSScriptRoot -ChildPath "Libs"
 $global:TempReadmePath=Join-Path -Path $LibsPath -ChildPath "TemplateReadme.txt"
 $global:ReadmePath=Join-Path -Path $ResultsPath -ChildPath "Readme.txt"
+$global:ModulePath=Join-Path -Path $ResultsPath -ChildPath "SignatureModule.psm1"
 Function Detect-Filetype {
     if ($FileExten -eq ".xlsx") {
         write-host "Excel!!"
@@ -42,14 +43,15 @@ Function Excel-File ($File) {
     #Ensure the naming scheme is right...
     $Excel = New-Object -ComObject Excel.Application
     $wb = $Excel.Workbooks.Open($File)
+    $global:CSVFile=Join-Path -Path $FilePath -ChildPath $FileName".csv"
     foreach ($ws in $wb.Worksheets) {
-        $ws.SaveAs($FilePath + "\" + $FileName + ".csv", 6)
+        $ws.SaveAs($CSVFile, 6)
     ###Use a Join-Path here if possible...
-       $File = "$FilePath" + "\" + "$FileName" + ".csv"
-       write-host="$File"
+       $File = $CSVFile
+      # write-host="$File"
     }
     $Excel.Quit()
-    write-host "`$File = $File"
+    #write-host "`$File = $File"
     Detect-Filetype
 }
 
