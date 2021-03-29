@@ -1,50 +1,4 @@
-##This file is the import module for the suricata script, all repetitive functions go in here to keep the main script clean##
 ###ADD WORKING FUNCTIONS HERE###
-
-##Sorts data based on header##
-function Sort{
-   $Type += $file[$count].type
-   $Content += $file[$count].indicator
-   $Content += $file[$count].value
-   $Message += $file[$count].type 
-   $Message += $file[$count].actors
-   $Reference += $file[$count].malware_families
-   $Reference += $file[$count].published_date
-   $Reference += $file[$count].reports  
-   $Reference += $file[$count].attribute_tag
-   $Classtype += $file[$count].malicious_confidence
-   $Classtype += $file[$count].label
-}
-
-
-##Detects hashes in the type field and outputs accordingly##
-Function hash{
-  $Content += $indicator | select-string -pattern "|^"
-  if ($type -match "IP|*") {
-      $content += $indicator | select-string -pattern "^|" 
-   }
-}
-
-
-##Main work function, iterates through every type and sorts based on that##
-function TypeFunction{
-  if ($type -eq ip_address){
-    Sort()
-    $IP-SRC = $Content
-   }
-  if ($type -eq ip-src){
-    Sort()
-    $IP-SRC = $Content
-   }
-   if ($type -eq ip-dst){
-    Sort()
-    $IP-DST = $Content
-   }
-}
-
-
-
-
 
 ##Detects filetypes other than CSV##
 Function Detect-Filetype {
@@ -64,13 +18,10 @@ Function Detect-Filetype {
     }
 }
 
-
-
-
 Function Detect-Filetype {
     if ($FileExten -eq ".xlsx") {
         write-host "Excel!!"
-        #StripExcelHeader()
+        #Excel-Strip
         #Excel-File($File)
     }
     elseif ($FileExten -eq ".csv") {
@@ -107,9 +58,4 @@ Function Build-Results {
     $TemplateContent = get-content -path $TempReadmePath
     Invoke-expression """$TemplateContent""" | set-content -path $ReadmePath
 }
-
-function normalizefile{
-   Detect-Filetype()
-}
-
 
