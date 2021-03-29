@@ -31,122 +31,122 @@ $Count = 0
 $length = $FileContent.length
 
 function Detect-Type {
-  if ($FileContent[$Count].type -eq "ip-src"){
-    $IPSRC = "ANY" 
-    $IPDST = "ANY"
-    $Type = @()
-    $Content = @()
-    $Message = @()
-    $Type += $FileContent[$Count].type
-    $Content += $FileContent[$Count].value
-    $Message += $FileContent[$Count].type 
-    $Reference += $FileContent[$Count].attribute_tag
-    $IPSRC = $Content
-    echo "alert $IPSRC ANY <> $IPDST ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
-    $global:SID += 1
-    $global:TotalIPs += 1
-   }
-   if ($FileContent[$Count].type -eq "ip-dst"){
-    $IPSRC = "ANY" 
-    $IPDST = "ANY"
-    $Type = @()
-    $Content = @()
-    $Message = @()
-    $Type += $FileContent[$Count].type
-    $Content += $FileContent[$Count].value
-    $Message += $FileContent[$Count].type 
-    $Reference += $FileContent[$Count].attribute_tag
-    $IPDST = $Content
-    echo "alert $IPSRC ANY <> $IPDST ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
-    $global:SID += 1
-    $global:TotalIPs += 1
-   }
+    if ($FileContent[$Count].type -eq "ip-src") {
+        $IPSRC = "ANY" 
+        $IPDST = "ANY"
+        $Type = @()
+        $Content = @()
+        $Message = @()
+        $Type += $FileContent[$Count].type
+        $Content += $FileContent[$Count].value
+        $Message += $FileContent[$Count].type 
+        $Reference += $FileContent[$Count].attribute_tag
+        $IPSRC = $Content
+        echo "alert $IPSRC ANY <> $IPDST ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
+        $global:SID += 1
+        $global:TotalIPs += 1
+    }
+    if ($FileContent[$Count].type -eq "ip-dst"){
+        $IPSRC = "ANY" 
+        $IPDST = "ANY"
+        $Type = @()
+        $Content = @()
+        $Message = @()
+        $Type += $FileContent[$Count].type
+        $Content += $FileContent[$Count].value
+        $Message += $FileContent[$Count].type 
+        $Reference += $FileContent[$Count].attribute_tag
+        $IPDST = $Content
+        echo "alert $IPSRC ANY <> $IPDST ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
+        $global:SID += 1
+        $global:TotalIPs += 1
+    }
 
     ##Hash Statements
 
-   if ($FileContent[$Count].type -eq "sha1"){
-    $Type = @()
-    $Content = @()
-    $Message = @()
-    $Type += $FileContent[$Count].type
-    $Content += $FileContent[$Count].value
-    $Message += $FileContent[$Count].type 
-    $Reference += $FileContent[$Count].attribute_tag
-    echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
-    $global:SID += 1
-    $global:TotalHashes += 1
+    if ($FileContent[$Count].type -eq "sha1"){
+        $Type = @()
+        $Content = @()
+        $Message = @()
+        $Type += $FileContent[$Count].type
+        $Content += $FileContent[$Count].value
+        $Message += $FileContent[$Count].type 
+        $Reference += $FileContent[$Count].attribute_tag
+        echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
+        $global:SID += 1
+        $global:TotalHashes += 1
    }
     if ($FileContent[$Count].type -eq "hash_sha1"){
-    $Type = @()
-    $Content = @()
-    $Message = @()
-    $Type += $FileContent[$Count].type
-    $Content += $FileContent[$Count].value
-    $Message += $FileContent[$Count].type 
-    $Reference += $FileContent[$Count].attribute_tag
-    echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
-    $global:SID += 1
-    $global:TotalHashes += 1
-   }
-   if ($FileContent[$Count].type -eq "sha256"){
-    $Type = @()
-    $Content = @()
-    $Message = @()
-    $Type += $FileContent[$Count].type
-    $Content += $FileContent[$Count].value
-    $Message += $FileContent[$Count].type 
-    $Reference += $FileContent[$Count].attribute_tag
-    echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
-    $global:SID += 1
-    $global:TotalHashes += 1
-   }
+        $Type = @()
+        $Content = @()
+        $Message = @()
+        $Type += $FileContent[$Count].type
+        $Content += $FileContent[$Count].value
+        $Message += $FileContent[$Count].type 
+        $Reference += $FileContent[$Count].attribute_tag
+        echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
+        $global:SID += 1
+        $global:TotalHashes += 1
+    }
+    if ($FileContent[$Count].type -eq "sha256"){
+        $Type = @()
+        $Content = @()
+        $Message = @()
+        $Type += $FileContent[$Count].type
+        $Content += $FileContent[$Count].value
+        $Message += $FileContent[$Count].type 
+        $Reference += $FileContent[$Count].attribute_tag
+        echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
+        $global:SID += 1
+        $global:TotalHashes += 1
+    }
     if ($FileContent[$Count].type -eq "sha384"){
-    $Type = @()
-    $Content = @()
-    $Message = @()
-    $Type += $FileContent[$Count].type
-    $Content += $FileContent[$Count].value
-    $Message += $FileContent[$Count].type 
-    $Reference += $FileContent[$Count].attribute_tag
-    echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
-    $global:SID += 1
-    $global:TotalHashes += 1
-   }
+        $Type = @()
+        $Content = @()
+        $Message = @()
+        $Type += $FileContent[$Count].type
+        $Content += $FileContent[$Count].value
+        $Message += $FileContent[$Count].type 
+        $Reference += $FileContent[$Count].attribute_tag
+        echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
+        $global:SID += 1
+        $global:TotalHashes += 1
+    }
     if ($FileContent[$Count].type -eq "sha512"){
-    $Type = @()
-    $Content = @()
-    $Message = @()
-    $Type += $FileContent[$Count].type
-    $Content += $FileContent[$Count].value
-    $Message += $FileContent[$Count].type 
-    $Reference += $FileContent[$Count].attribute_tag
-    echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile.rules
-    $global:SID += 1
-    $global:TotalHashes += 1
-   }
+        $Type = @()
+        $Content = @()
+        $Message = @()
+        $Type += $FileContent[$Count].type
+        $Content += $FileContent[$Count].value
+        $Message += $FileContent[$Count].type 
+        $Reference += $FileContent[$Count].attribute_tag
+        echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile.rules
+        $global:SID += 1
+        $global:TotalHashes += 1
+    }
     if ($FileContent[$Count].type -eq "authentihash"){
-    $Type = @()
-    $Content = @()
-    $Message = @()
-    $Type += $FileContent[$Count].type
-    $Content += $FileContent[$Count].value
-    $Message += $FileContent[$Count].type 
-    $Reference += $FileContent[$Count].attribute_tag
-    echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
-    $global:SID += 1
-    $global:TotalHashes += 1
-   }
+        $Type = @()
+        $Content = @()
+        $Message = @()
+        $Type += $FileContent[$Count].type
+        $Content += $FileContent[$Count].value
+        $Message += $FileContent[$Count].type 
+        $Reference += $FileContent[$Count].attribute_tag
+        echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
+        $global:SID += 1
+        $global:TotalHashes += 1
+    }
     if ($FileContent[$Count].type -eq "ssdeep"){
-    $Type = @()
-    $Content = @()
-    $Message = @()
-    $Type += $FileContent[$Count].type
-    $Content += $FileContent[$Count].value
-    $Message += $FileContent[$Count].type 
-    $Reference += $FileContent[$Count].attribute_tag
-    echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
-    $global:SID += 1
-    $global:TotalHashes += 1
+        $Type = @()
+        $Content = @()
+        $Message = @()
+        $Type += $FileContent[$Count].type
+        $Content += $FileContent[$Count].value
+        $Message += $FileContent[$Count].type 
+        $Reference += $FileContent[$Count].attribute_tag
+        echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
+        $global:SID += 1
+        $global:TotalHashes += 1
     }
     if ($FileContent[$Count].type -eq "md5"){
         $Type = @()
@@ -169,7 +169,6 @@ function Detect-Type {
 while ($Count -lt $length){
     Detect-Type
     $Count += 1
-    Write-host $global:SID
 }
 
 Build-Results
