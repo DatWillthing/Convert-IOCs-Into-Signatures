@@ -160,9 +160,11 @@ function Detect-Type {
         $global:SID += 1
         $global:TotalHashes += 1
     }
+    <# This statement is getting hit every loop... Not sure why
     else {
         $global:TotalSkips += 1
     }
+    #>
 }
 
 ##Iterates through the file and writes pertinent info to suricata rules##
