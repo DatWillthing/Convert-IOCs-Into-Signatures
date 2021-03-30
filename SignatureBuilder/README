@@ -1,11 +1,8 @@
-#This entire folder must be copied to effectively use the SignatureScript.ps1 stored inside.
+The purpose of this script is to take IOC files as input and output them into Suricata rules.
 
-#Copy the SignatureBuilder directory and all of its dependencies to your desktop or working directory.
-
-
-##Operation of the Script###
-
-#You have two options of how to use the script. If one doesn't work, try the other
+How-To
+* Copy the SignatureBuilder directory and all of its dependencies to your desktop or working directory.
+* You have two options of how to use the script. If one doesn't work, try the other:
 
 GUI
     1.) Through the GUI, open up the SignatureBuilder directory.
