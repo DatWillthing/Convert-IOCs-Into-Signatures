@@ -22,9 +22,8 @@ CLI
     6.) The results of the script should appear in the newly created Results directory within the SignatureBuilder Directory. More guidance is in the Readme file of the Results directory.
 
 
-##Managing Execution Policy###
+Managing Execution Policy
+* Manually run the command in your Powershell window:
+  *  Set-ExecutionPolicy unrestricted -Force
 
-Manually run the command in your Powershell window:
-Set-ExecutionPolicy unrestricted -Force
-
-Now try the script again...
+* Now try the script again...
