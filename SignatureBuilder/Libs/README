@@ -1,1 +1,4 @@
 This is the location for references and libraries used by the script.
+
+* The plan is to eventually create output signature files of other formats besides only suricata. Some of the types that we still need to handle are...
+
