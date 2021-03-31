@@ -4,7 +4,7 @@ $Today=Get-Date -Format "yyyy-MM-dd"
 Function Input-File {
     ##Breaks up the input file into parts
     if ($File -eq "") {
-        $File = read-host "Input the full path to the signature file: "
+        $global:File = read-host "Input the full path to the signature file: "
     }
     $global:FileExten=[System.IO.Path]::GetExtension("$File")
     $global:FileName=[System.IO.Path]::GetFileNameWithoutExtension("$File")
