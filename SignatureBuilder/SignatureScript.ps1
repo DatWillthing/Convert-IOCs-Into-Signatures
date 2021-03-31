@@ -24,7 +24,7 @@ Import-Module -force -name "$ModulePath"
 Input-File
 Detect-Filetype
 
-$FileContent = import-csv -Path "$File" 
+$FileContent = import-csv -Path $File 
 
 ##Variable Declaration##
 $Count = 0
