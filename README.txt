@@ -4,6 +4,10 @@ How-To
 * Copy the Convert-IOCs-Into-Signatures directory and all of its dependencies to your desktop or working directory.
 * You have two options of how to use the script. If one doesn't work, try the other:
 
+IMPORTANT
+* If you do not has excel you can only use .CSV files.
+* Check the files you're inputting to make sure the Headers aren't "Column", if they are simply delete the top row.
+
 GUI
     1.) Through the GUI, open up the Convert-IOCs-Into-Signatures directory.
     2.) Right Click the SignatureScript.ps1 and click the "Run as Powershell" option.
