@@ -160,6 +160,17 @@ function Detect-Type {
         $global:SID += 1
         $global:TotalHashes += 1
     }
+    if ($file[$count].type -eq "domain"){
+        $Type = @()
+        $Content = @()
+        $Message = @()
+        $Type += $file[$count].type
+        $Content += $file[$count].value
+        $Message += $file[$count].type 
+        $Reference += $file[$count].attribute_tag
+        echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
+        $global:SID += 1
+    }
     <# This statement is getting hit every loop... Not sure why
     else {
         $global:TotalSkips += 1
