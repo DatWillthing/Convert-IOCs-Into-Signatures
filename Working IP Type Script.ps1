@@ -125,6 +125,16 @@ function Detect-Type{
     $Reference += $file[$count].attribute_tag
     echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $savedrules\rules.txt
     }
+    if ($file[$count].type -eq "domain"){
+    $Type = @()
+    $Content = @()
+    $Message = @()
+    $Type += $file[$count].type
+    $Content += $file[$count].value
+    $Message += $file[$count].type 
+    $Reference += $file[$count].attribute_tag
+    echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $savedrules\rules.txt
+    }
 }
 
 ##Iterates through the file and writes pertinent info to suricata rules##
