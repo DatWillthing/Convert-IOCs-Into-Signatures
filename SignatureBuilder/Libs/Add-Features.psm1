@@ -17,7 +17,7 @@ Function Input-File {
 Function Detect-Filetype {
     if ($FileExten -eq ".xlsx") {
         write-host "Excel!!"
-        #Excel-File($File)
+        Excel-File($File)
     }
     elseif ($FileExten -eq ".csv") {
         write-host "CSV yes, please!!"
