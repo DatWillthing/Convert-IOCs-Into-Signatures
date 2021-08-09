@@ -6,6 +6,7 @@ Function Input-File {
     if ($File -eq "") {
         $global:File = read-host "Input the full path to the signature file: "
     }
+    ##System.IO.Path detects the filesystem of the host so that the script can run on either Windows or Linux
     $global:FileExten=[System.IO.Path]::GetExtension("$File")
     $global:FileName=[System.IO.Path]::GetFileNameWithoutExtension("$File")
     $global:FilePath=[System.IO.Path]::GetDirectoryName("$File")
