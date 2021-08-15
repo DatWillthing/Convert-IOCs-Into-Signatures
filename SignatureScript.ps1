@@ -22,6 +22,7 @@ New-Item -Name "$OutputName`.rules" -ItemType File -Path $ResultsPath
 Import-Module -force -name "$ModulePath"
 
 Input-File
+$StartTime = $(get-date)
 Detect-Filetype
 
 $FileContent = import-csv -Path $File 
@@ -29,8 +30,42 @@ $FileContent = import-csv -Path $File
 ##Variable Declaration##
 $Count = 0
 $length = $FileContent.length
+####################
+function Indicator-Hash {
+        $Type = @()
+        $Content = @()
+        $Message = @()
+        $Type += $FileContent[$Count].type
+        $Content += $FileContent[$Count].indicator
+        if ($Content -ne $null){
+            $FinalContent = " content`:`"$Content`"`;" 
+        }
+
+        $Message += $FileContent[$Count].type 
+        $Message += $FileContent[$Count].message 
+        if ($Message -ne $null){
+            $FinalMessage = " msg`:`"$Message`"`;" 
+        }
+	$Reference += $FileContent[$Count].attribute_tag
+        echo "alert ANY ANY <> ANY ANY ($FinalMessage $FinalContent reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
+        $global:SID += 1
+        $global:TotalHashes += 1
+}
+
+
+
+####################
 
 function Detect-Type {
+    if ($FileContent[$Count].type -eq "hash_sha1"){
+        Indicator-Hash
+    }
+    if ($FileContent[$Count].type -eq "hash_sha256"){
+        Indicator-Hash
+    }
+    if ($FileContent[$Count].type -eq "hash_md5"){
+        Indicator-Hash
+    }
     if ($FileContent[$Count].type -eq "ip-src") {
         $IPSRC = "ANY" 
         $IPDST = "ANY"
@@ -89,36 +124,12 @@ function Detect-Type {
         $global:SID += 1
         $global:TotalHashes += 1
    }
-    if ($FileContent[$Count].type -eq "hash_sha1"){
-        $Type = @()
-        $Content = @()
-        $Message = @()
-        $Type += $FileContent[$Count].type
-        $Content += $FileContent[$Count].indicator
-        $Message += $FileContent[$Count].type 
-        $Reference += $FileContent[$Count].attribute_tag
-        echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
-        $global:SID += 1
-        $global:TotalHashes += 1
-    }
     if ($FileContent[$Count].type -eq "sha256"){
         $Type = @()
         $Content = @()
         $Message = @()
         $Type += $FileContent[$Count].type
         $Content += $FileContent[$Count].value
-        $Message += $FileContent[$Count].type 
-        $Reference += $FileContent[$Count].attribute_tag
-        echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
-        $global:SID += 1
-        $global:TotalHashes += 1
-    }
-    if ($FileContent[$Count].type -eq "hash_sha256"){
-        $Type = @()
-        $Content = @()
-        $Message = @()
-        $Type += $FileContent[$Count].type
-        $Content += $FileContent[$Count].indicator
         $Message += $FileContent[$Count].type 
         $Reference += $FileContent[$Count].attribute_tag
         echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
@@ -185,18 +196,6 @@ function Detect-Type {
         $global:SID += 1
         $global:TotalHashes += 1
     }
-    if ($FileContent[$Count].type -eq "hash_md5"){
-        $Type = @()
-        $Content = @()
-        $Message = @()
-        $Type += $FileContent[$Count].type
-        $Content += $FileContent[$Count].indicator
-        $Message += $FileContent[$Count].type 
-        $Reference += $FileContent[$Count].attribute_tag
-        echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
-        $global:SID += 1
-        $global:TotalHashes += 1
-    }
     if ($FileContent[$Count].type -eq "domain"){
         $Type = @()
         $Content = @()
@@ -247,4 +246,6 @@ while ($Count -lt $length){
 }
 
 Build-Results
-write-host "done"
+$elapsedTime = $(get-date) - $StartTime
+$totalTime = "{0:HH:mm:ss}" -f ([datetime]$elapsedTime.Ticks)
+write-host "Complete! Total time: $totalTime"
