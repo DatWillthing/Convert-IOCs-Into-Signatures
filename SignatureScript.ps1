@@ -43,7 +43,7 @@ function Detect-Type {
         $Message += $FileContent[$Count].type 
         $Reference += $FileContent[$Count].attribute_tag
         $IPSRC = $Content
-        echo "alert $IPSRC ANY <> $IPDST ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
+        echo "alert $IPSRC ANY <> $IPDST ANY (msg:`"$Message`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
         $global:SID += 1
         $global:TotalIPs += 1
     }
@@ -58,11 +58,24 @@ function Detect-Type {
         $Message += $FileContent[$Count].type 
         $Reference += $FileContent[$Count].attribute_tag
         $IPDST = $Content
-        echo "alert $IPSRC ANY <> $IPDST ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
+        echo "alert $IPSRC ANY <> $IPDST ANY (msg:`"$Message`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
         $global:SID += 1
         $global:TotalIPs += 1
     }
-
+    if ($FileContent[$Count].type -eq "ip_address"){
+        $Type = @()
+        $Content = @()
+        $Message = @()
+        $Type += $FileContent[$Count].type
+        $Content += $FileContent[$Count].indicator
+        $Message += $FileContent[$Count].type 
+        $Reference += $FileContent[$Count].attribute_tag
+        $IPADDR = $Content
+        echo "alert $IPADDR ANY <> ANY ANY (msg:`"$Message`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
+        echo "alert ANY ANY <> $IPADDR ANY (msg:`"$Message`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
+        $global:SID += 2
+        $global:TotalIPs += 2
+    }
     ##Hash Statements
 
     if ($FileContent[$Count].type -eq "sha1"){
@@ -191,6 +204,7 @@ function Detect-Type {
         $Message = @()
         $Type += $file[$count].type
         $Content += $file[$count].indicator
+        $Content += $file[$count].value
         $Message += $file[$count].type 
         $Reference += $file[$count].attribute_tag
         echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
@@ -202,6 +216,7 @@ function Detect-Type {
         $Message = @()
         $Type += $file[$count].type
         $Content += $file[$count].indicator
+        $Content += $file[$count].value
         $Message += $file[$count].type 
         $Reference += $file[$count].attribute_tag
         echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
@@ -213,6 +228,7 @@ function Detect-Type {
         $Message = @()
         $Type += $file[$count].type
         $Content += $file[$count].indicator
+        $Content += $file[$count].value
         $Message += $file[$count].type 
         $Reference += $file[$count].attribute_tag
         echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
