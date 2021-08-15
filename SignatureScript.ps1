@@ -71,10 +71,9 @@ function Detect-Type {
         $Message += $FileContent[$Count].type 
         $Reference += $FileContent[$Count].attribute_tag
         $IPADDR = $Content
-        echo "alert $IPADDR ANY <> ANY ANY (msg:`"$Message`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
         echo "alert ANY ANY <> $IPADDR ANY (msg:`"$Message`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
-        $global:SID += 2
-        $global:TotalIPs += 2
+        $global:SID += 1
+        $global:TotalIPs += 1
     }
     ##Hash Statements
 
