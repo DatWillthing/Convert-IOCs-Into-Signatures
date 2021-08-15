@@ -185,12 +185,34 @@ function Detect-Type {
         $global:SID += 1
         $global:TotalHashes += 1
     }
-    if ($file[$count].type -eq "domain"){
+    if ($FileContent[$Count].type -eq "domain"){
         $Type = @()
         $Content = @()
         $Message = @()
         $Type += $file[$count].type
-        $Content += $file[$count].value
+        $Content += $file[$count].indicator
+        $Message += $file[$count].type 
+        $Reference += $file[$count].attribute_tag
+        echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
+        $global:SID += 1
+    }
+    if ($FileContent[$Count].type -eq "url"){
+        $Type = @()
+        $Content = @()
+        $Message = @()
+        $Type += $file[$count].type
+        $Content += $file[$count].indicator
+        $Message += $file[$count].type 
+        $Reference += $file[$count].attribute_tag
+        echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
+        $global:SID += 1
+    }
+    if ($FileContent[$Count].type -eq "email_address"){
+        $Type = @()
+        $Content = @()
+        $Message = @()
+        $Type += $file[$count].type
+        $Content += $file[$count].indicator
         $Message += $file[$count].type 
         $Reference += $file[$count].attribute_tag
         echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
