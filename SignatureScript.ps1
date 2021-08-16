@@ -84,6 +84,37 @@ function Value-Hash {
         $global:SID += 1
         $global:TotalHashes += 1
 }
+function Indicator-Domain {
+        $Type = @()
+        $Content = @()
+        $Message = @()
+        $Reference = @()
+        $Classtype = @()
+        $Type += $FileContent[$Count].type
+        $Content += $FileContent[$Count].indicator
+        if ($Content -ne $null){
+            $FinalContent = " content`:`"$Content`"`;"
+        }
+        $Message += $FileContent[$Count].type
+        $Message += $FileContent[$Count].labels
+        if ($Message -ne $null){
+            $FinalMessage = " msg`:`"$Message`"`;"
+        }
+        $Reference += $FileContent[$Count].actors
+        $Reference += $FileContent[$Count].reports
+        if ($Reference -ne $null){
+            $FinalReference = " reference`:`"$Reference`"`;"
+        }
+        $Classtype += $Classtype[$Count].malicous_confidence
+        $Classtype += $Classtype[$Count].malware_families
+        $Classtype += $Classtype[$Count].kill_chains
+        if ($Classtype -ne $null){
+            $FinalClasstype = " classtype`:`"$Classtype`"`;"
+        }
+        echo "alert ANY ANY <> ANY ANY ($FinalMessage $FinalContent $FinalReference $FinalClasstype sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
+        $global:SID += 1
+        $global:TotalDomains += 1
+}
 ####################
 
 function Detect-Type {
@@ -165,40 +196,13 @@ function Detect-Type {
     }
     ####Domain Statements
     if ($FileContent[$Count].type -eq "domain"){
-        $Type = @()
-        $Content = @()
-        $Message = @()
-        $Type += $FileContent[$count].type
-        $Content += $FileContent[$count].indicator
-        $Content += $FileContent[$count].value
-        $Message += $FileContent[$count].type
-        $Reference += $FileContent[$count].attribute_tag
-        echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
-        $global:SID += 1
+        Indicator-Domain
     }
     if ($FileContent[$Count].type -eq "url"){
-        $Type = @()
-        $Content = @()
-        $Message = @()
-        $Type += $FileContent[$count].type
-        $Content += $FileContent[$count].indicator
-        $Content += $FileContent[$count].value
-        $Message += $FileContent[$count].type
-        $Reference += $FileContent[$count].attribute_tag
-        echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
-        $global:SID += 1
+        Indicator-Domain
     }
     if ($FileContent[$Count].type -eq "email_address"){
-        $Type = @()
-        $Content = @()
-        $Message = @()
-        $Type += $FileContent[$count].type
-        $Content += $FileContent[$count].indicator
-        $Content += $FileContent[$count].value
-        $Message += $FileContent[$count].type
-        $Reference += $FileContent[$count].attribute_tag
-        echo "alert ANY ANY <> ANY ANY (msg:`"$Message`"; content:`"$Content`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
-        $global:SID += 1
+        Indicator-Domain
     }
     <# This statement is getting hit every loop... Not sure why
     else {
