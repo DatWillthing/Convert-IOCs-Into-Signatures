@@ -17,11 +17,11 @@ Function Input-File {
 ##Detects the Filetype and changes if need be. It should loop if it hits an excel file. This should move directly into the next function based on its output.
 Function Detect-Filetype {
     if ($FileExten -eq ".xlsx") {
-        write-host "Excel!!"
+        #write-host "Excel!!"
         Excel-File($File)
     }
     elseif ($FileExten -eq ".csv") {
-        write-host "CSV yes, please!!"
+        #write-host "CSV yes, please!!"
         #Check-Headers
     }
     elseif ($FileExten -eq "") {
