@@ -10,13 +10,13 @@ $global:SID = $FirstSID
 $Today=Get-Date -Format "yyyy-MM-dd"
 
 ##Define localized paths
-New-Item -Name "Results" -ItemType Directory -Path $PSScriptRoot
+New-Item -Name "Results" -ItemType Directory -Path $PSScriptRoot -erroraction 'silentlycontinue'
 $global:ResultsPath=Join-Path -Path $PSScriptRoot -ChildPath "Results"
 $global:LibsPath=Join-Path -Path $PSScriptRoot -ChildPath "Libs"
 $global:TempReadmePath=Join-Path -Path $LibsPath -ChildPath "TemplateReadme.txt"
 $global:ReadmePath=Join-Path -Path $ResultsPath -ChildPath "Readme.txt"
 $global:ModulePath=Join-Path -Path $LibsPath -ChildPath "Add-Features.psm1"
-New-Item -Name "$OutputName`.rules" -ItemType File -Path $ResultsPath
+New-Item -Name "$OutputName`.rules" -ItemType File -Path $ResultsPath -erroraction 'silentlycontinue'
 
 ##Import functions module##
 Import-Module -force -name "$ModulePath"
