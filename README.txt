@@ -13,7 +13,7 @@ GUI
     2.) Right Click the SignatureScript.ps1 and click the "Run as Powershell" option.
     3.) READ THE ERRORS! If there is an error with the execution policy, see the "Managing Execution Policy" section of this Readme.
     4.) Follow the Script and input the FULL path of the signature file when requested. An easier way to do this is to drag and drop the signature file into the powershell window.
-    5.) The results of the script should appear in the newly created Results directory within the Convert-IOCs-Into-Signatures Directory. More guidance is in the Readme file of            the Results directory.
+    5.) The results of the script should appear in the newly created Results directory within the Convert-IOCs-Into-Signatures Directory. More guidance is in the Readme file of the Results directory.
 
 CLI
     1.) Open up a powershell window. (Just regular powershell, not ISE)
