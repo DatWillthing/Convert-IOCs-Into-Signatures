@@ -92,24 +92,31 @@ function Indicator-Domain {
         $Classtype = @()
         $Type += $FileContent[$Count].type
         $Content += $FileContent[$Count].indicator
+	$Content += $FileContent[$Count].value
         if ($Content -ne $null){
             $FinalContent = " content`:`"$Content`"`;"
+            $FinalContent = $FinalContent.Trim( )
         }
         $Message += $FileContent[$Count].type
         $Message += $FileContent[$Count].labels
         if ($Message -ne $null){
             $FinalMessage = " msg`:`"$Message`"`;"
+            $FinalMessage = $FinalMessage.Trim( )
+            $FinalMessage = $FinalMessage.Trim( )
         }
         $Reference += $FileContent[$Count].actors
         $Reference += $FileContent[$Count].reports
         if ($Reference -ne $null){
             $FinalReference = " reference`:`"$Reference`"`;"
+            $FinalReference = $FinalReference.Trim( )
         }
+
         $Classtype += $Classtype[$Count].malicous_confidence
         $Classtype += $Classtype[$Count].malware_families
         $Classtype += $Classtype[$Count].kill_chains
         if ($Classtype -ne $null){
             $FinalClasstype = " classtype`:`"$Classtype`"`;"
+            $FinalClasstype = $FinalClasstype.Trim( )
         }
         echo "alert ANY ANY <> ANY ANY ($FinalMessage $FinalContent $FinalReference $FinalClasstype sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
         $global:SID += 1
