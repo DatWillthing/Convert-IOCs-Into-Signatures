@@ -45,8 +45,6 @@ Function Check-Header {
 Check-Header
 
 $FileContent = import-csv -Path $File
-
-
 ##Variable Declaration##
 $Count = 0
 $length = $FileContent.length
@@ -104,7 +102,7 @@ function Indicator-Domain {
         $Message += $FileContent[$Count].labels
         if ($Message -ne $null){
             $FinalMessage = " msg`:`"$Message`"`;"
-            $FinalMessage -replace '[\u0032]', ''
+            $FinalMessage -replace '[\u0032]', '' | Out-Null
             $FinalMessage = $FinalMessage.Trim( )
         }
         $Reference += $FileContent[$Count].attribute_tag
@@ -226,7 +224,11 @@ while ($Count -lt $length){
     Detect-Type
     $Count += 1
 }
+function Clean-File {
+    get-content $OutputFile`.rules | Where { $_.Replace("\S","") -ne "" } | Set-content $OutputFile`.rules
+}
 
+Clean-File
 Build-Results
 $elapsedTime = $(get-date) - $StartTime
 $totalTime = "{0:HH:mm:ss}" -f ([datetime]$elapsedTime.Ticks)
