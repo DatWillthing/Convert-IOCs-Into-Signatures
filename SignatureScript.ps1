@@ -49,162 +49,196 @@ $FileContent = import-csv -Path $File
 $Count = 0
 $length = $FileContent.length
 ####################
-function Indicator-Hash {
-        $Type = @()
+function Content-Hash {
         $Content = @()
         $Message = @()
         $Reference = @()
         $Classtype = @()
-        $Type += $FileContent[$Count].type
         $Content += $FileContent[$Count].indicator
         if ($Content -ne $null){
-            $FinalContent = " content`:`"$Content`"`;"
+            $FinalContent = "content`:`"$Content`"`;"
             $FinalContent = $FinalContent.Trim( )
         }
-        $Message += $FileContent[$Count].type
-        $Message += $FileContent[$Count].labels
-        $Message += $FileContent[$Count].message
+        if ($FileContent[$Count].type -ne $null){$Message += $FileContent[$Count].type}
+        if ($FileContent[$Count].labels -ne $null){$Message += $FileContent[$Count].labels}
+        if ($FileContent[$Count].message -ne $null){$Message += $FileContent[$Count].message}
         if ($Message -ne $null){
-            $FinalMessage = " msg`:`"$Message`"`;"
+            $FinalMessage = "msg`:`"$Message`"`;"
             $FinalMessage = $FinalMessage.Trim( )
         }
-        $Reference += $FileContent[$Count].attribute_tag
-        $Reference += $FileContent[$Count].actors
-        $Reference += $FileContent[$Count].reports
+        if ($FileContent[$Count].attribute_tag -ne $null){$Reference += $FileContent[$Count].attribute_tag}
+        if ($FileContent[$Count].actors -ne $null){$Reference += $FileContent[$Count].actors}
+        if ($FileContent[$Count].reports -ne $null){$Reference += $FileContent[$Count].reports}
         if ($Reference -ne $null){
-            $FinalReference = " reference`:`"$Reference`"`;"
+            $FinalReference = "reference`:`"$Reference`"`;"
+            $FinalReference = $FinalReference.Trim( )
         }
-
-        $Classtype += $Classtype[$Count].malicous_confidence
-        $Classtype += $Classtype[$Count].malware_families
-        $Classtype += $Classtype[$Count].kill_chains
+        if ($FileContent[$Count].malicious_confidence -ne $null){$Classtype += $FileContent[$Count].malicious_confidence}
+        if ($FileContent[$Count].malware_families -ne $null){$Classtype += $FileContent[$Count].malware_families}
+        if ($FileContent[$Count].kill_chains -ne $null){$Classtype += $FileContent[$Count].kill_chains}
         if ($Classtype -ne $null){
-            $FinalClasstype = " classtype`:`"$Classtype`"`;"
+            $FinalClasstype = "classtype`:`"$Classtype`"`;"
             $FinalClasstype = $FinalClasstype.Trim( )
         }
-        echo "alert ANY ANY <> ANY ANY ($FinalMessage $FinalContent $FinalReference $FinalClasstype sid:$SID; rev:1;)" >> $OutputFile`.rules
+        $FinalSID = "sid`:`"$global:SID`"`;rev`:1`;"
+        echo "alert ANY ANY <> ANY ANY ($FinalMessage$FinalContent$FinalReference$FinalClasstype$FinalSID)" >> $OutputFile`.rules
         $global:SID += 1
         $global:TotalHashes += 1
 }
-function Indicator-Domain {
-        $Type = @()
+function Content-Domain {
         $Content = @()
         $Message = @()
         $Reference = @()
         $Classtype = @()
-        $Type += $FileContent[$Count].type
         $Content += $FileContent[$Count].indicator
         if ($Content -ne $null){
-            $FinalContent = " content`:`"$Content`"`;"
+            $FinalContent = "content`:`"$Content`"`;"
             $FinalContent = $FinalContent.Trim( )
         }
-        $Message += $FileContent[$Count].type
-        $Message += $FileContent[$Count].labels
+        if ($FileContent[$Count].type -ne $null){$Message += $FileContent[$Count].type}
+        if ($FileContent[$Count].labels -ne $null){$Message += $FileContent[$Count].labels}
+        if ($FileContent[$Count].message -ne $null){$Message += $FileContent[$Count].message}
         if ($Message -ne $null){
-            $FinalMessage = " msg`:`"$Message`"`;"
-            $FinalMessage -replace '[\u0032]', '' | Out-Null
+            $FinalMessage = "msg`:`"$Message`"`;"
             $FinalMessage = $FinalMessage.Trim( )
         }
-        $Reference += $FileContent[$Count].attribute_tag
-        $Reference += $FileContent[$Count].actors
-        $Reference += $FileContent[$Count].reports
+        if ($FileContent[$Count].attribute_tag -ne $null){$Reference += $FileContent[$Count].attribute_tag}
+        if ($FileContent[$Count].actors -ne $null){$Reference += $FileContent[$Count].actors}
+        if ($FileContent[$Count].reports -ne $null){$Reference += $FileContent[$Count].reports}
         if ($Reference -ne $null){
-            $FinalReference = " reference`:`"$Reference`"`;"
+            $FinalReference = "reference`:`"$Reference`"`;"
             $FinalReference = $FinalReference.Trim( )
         }
-
-        $Classtype += $Classtype[$Count].malicous_confidence
-        $Classtype += $Classtype[$Count].malware_families
-        $Classtype += $Classtype[$Count].kill_chains
+        if ($FileContent[$Count].malicious_confidence -ne $null){$Classtype += $FileContent[$Count].malicious_confidence}
+        if ($FileContent[$Count].malware_families -ne $null){$Classtype += $FileContent[$Count].malware_families}
+        if ($FileContent[$Count].kill_chains -ne $null){$Classtype += $FileContent[$Count].kill_chains}
         if ($Classtype -ne $null){
-            $FinalClasstype = " classtype`:`"$Classtype`"`;"
+            $FinalClasstype = "classtype`:`"$Classtype`"`;"
             $FinalClasstype = $FinalClasstype.Trim( )
         }
-        echo "alert ANY ANY <> ANY ANY ($FinalMessage $FinalContent $FinalReference $FinalClasstype sid:$SID; rev:1;)" >> $OutputFile`.rules
+        $FinalSID = "sid`:`"$global:SID`"`;rev`:1`;"
+        echo "alert ANY ANY <> ANY ANY ($FinalMessage$FinalContent$FinalReference$FinalClasstype$FinalSID)" >> $OutputFile`.rules
         $global:SID += 1
         $global:TotalDomains += 1
 }
+
+function Source-Ip {
+        $Message = @()
+        $Reference = @()
+        $Classtype = @()
+        if ($FileContent[$Count].type -ne $null){$Message += $FileContent[$Count].type}
+        if ($FileContent[$Count].labels -ne $null){$Message += $FileContent[$Count].labels}
+        if ($FileContent[$Count].message -ne $null){$Message += $FileContent[$Count].message}
+        if ($Message -ne $null){
+            $FinalMessage = "msg`:`"$Message`"`;"
+            $FinalMessage = $FinalMessage.Trim( )
+        }
+        if ($FileContent[$Count].attribute_tag -ne $null){$Reference += $FileContent[$Count].attribute_tag}
+        if ($FileContent[$Count].actors -ne $null){$Reference += $FileContent[$Count].actors}
+        if ($FileContent[$Count].reports -ne $null){$Reference += $FileContent[$Count].reports}
+        if ($Reference -ne $null){
+            $FinalReference = "reference`:`"$Reference`"`;"
+            $FinalReference = $FinalReference.Trim( )
+        }
+        if ($FileContent[$Count].malicious_confidence -ne $null){$Classtype += $FileContent[$Count].malicious_confidence}
+        if ($FileContent[$Count].malware_families -ne $null){$Classtype += $FileContent[$Count].malware_families}
+        if ($FileContent[$Count].kill_chains -ne $null){$Classtype += $FileContent[$Count].kill_chains}
+        if ($Classtype -ne $null){
+            $FinalClasstype = "classtype`:`"$Classtype`"`;"
+            $FinalClasstype = $FinalClasstype.Trim( )
+        }
+        $FinalSID = "sid`:`"$global:SID`"`;rev`:1`;"
+        $IPSRC = $FileContent[$Count].indicator
+        echo "alert $IPSRC ANY <> ANY ANY ($FinalMessage$FinalReference$FinalClasstype$FinalSID)" >> $OutputFile`.rules
+        $global:SID += 1
+        $global:TotalIPs += 1
+}
+
+function Destination-Ip {
+        $Message = @()
+        $Reference = @()
+        $Classtype = @()
+        if ($FileContent[$Count].type -ne $null){$Message += $FileContent[$Count].type}
+        if ($FileContent[$Count].labels -ne $null){$Message += $FileContent[$Count].labels}
+        if ($FileContent[$Count].message -ne $null){$Message += $FileContent[$Count].message}
+        if ($Message -ne $null){
+            $FinalMessage = "msg`:`"$Message`"`;"
+            $FinalMessage = $FinalMessage.Trim( )
+        }
+        if ($FileContent[$Count].attribute_tag -ne $null){$Reference += $FileContent[$Count].attribute_tag}
+        if ($FileContent[$Count].actors -ne $null){$Reference += $FileContent[$Count].actors}
+        if ($FileContent[$Count].reports -ne $null){$Reference += $FileContent[$Count].reports}
+        if ($Reference -ne $null){
+            $FinalReference = "reference`:`"$Reference`"`;"
+            $FinalReference = $FinalReference.Trim( )
+        }
+        if ($FileContent[$Count].malicious_confidence -ne $null){$Classtype += $FileContent[$Count].malicious_confidence}
+        if ($FileContent[$Count].malware_families -ne $null){$Classtype += $FileContent[$Count].malware_families}
+        if ($FileContent[$Count].kill_chains -ne $null){$Classtype += $FileContent[$Count].kill_chains}
+        if ($Classtype -ne $null){
+            $FinalClasstype = "classtype`:`"$Classtype`"`;"
+            $FinalClasstype = $FinalClasstype.Trim( )
+        }
+        $FinalSID = "sid`:`"$global:SID`"`;rev`:1`;"
+        $IPDST = $FileContent[$Count].indicator
+        echo "alert ANY ANY <> $IPDST ANY ($FinalMessage$FinalReference$FinalClasstype$FinalSID)" >> $OutputFile`.rules
+        $global:SID += 1
+        $global:TotalIPs += 1
+}
+
 ####################
 
 function Detect-Type {
     ####Hash Statements
     if ($FileContent[$Count].type -eq "hash_sha1"){
-        Indicator-Hash
+        Content-Hash
     }
     if ($FileContent[$Count].type -eq "hash_sha256"){
-        Indicator-Hash
+        Content-Hash
     }
     if ($FileContent[$Count].type -eq "hash_md5"){
-        Indicator-Hash
+        Content-Hash
     }
     if ($FileContent[$Count].type -eq "sha1"){
-        Indicator-Hash
+        Content-Hash
    }
     if ($FileContent[$Count].type -eq "sha256"){
-        Indicator-Hash
+        Content-Hash
     }
     if ($FileContent[$Count].type -eq "sha384"){
-        Indicator-Hash
+        Content-Hash
     }
     if ($FileContent[$Count].type -eq "sha512"){
-        Indicator-Hash
+        Content-Hash
     }
     if ($FileContent[$Count].type -eq "authentihash"){
-        Indicator-Hash
+        Content-Hash
     }
     if ($FileContent[$Count].type -eq "ssdeep"){
-        Indicator-Hash
+        Content-Hash
     }
     if ($FileContent[$Count].type -eq "md5"){
-        Indicator-Hash
+        Content-Hash
     }
     ####IP Statements
     if ($FileContent[$Count].type -eq "ip-src") {
-        $IPSRC = "ANY"
-        $IPDST = "ANY"
-        $Content = @()
-        $Message = @()
-        $Content += $FileContent[$Count].indicator
-        $Message += $FileContent[$Count].type
-        $Reference += $FileContent[$Count].attribute_tag
-        $IPSRC = $Content
-        echo "alert $IPSRC ANY <> $IPDST ANY (msg:`"$Message`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" >> $OutputFile`.rules
-        $global:SID += 1
-        $global:TotalIPs += 1
+        Source-Ip
     }
     if ($FileContent[$Count].type -eq "ip-dst"){
-        $IPSRC = "ANY"
-        $IPDST = "ANY"
-        $Content = @()
-        $Message = @()
-        $Content += $FileContent[$Count].indicator
-        $Message += $FileContent[$Count].type
-        $Reference += $FileContent[$Count].attribute_tag
-        $IPDST = $Content
-        echo "alert $IPSRC ANY <> $IPDST ANY (msg:`"$Message`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" >> $OutputFile`.rules
-        $global:SID += 1
-        $global:TotalIPs += 1
+        Destination-Ip
     }
     if ($FileContent[$Count].type -eq "ip_address"){
-        $Content = @()
-        $Message = @()
-        $Content += $FileContent[$Count].indicator
-        $Message += $FileContent[$Count].type
-        $Reference += $FileContent[$Count].attribute_tag
-        $IPADDR = $Content
-        echo "alert ANY ANY <> $IPADDR ANY (msg:`"$Message`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" >> $OutputFile`.rules
-        $global:SID += 1
-        $global:TotalIPs += 1
+        Destination-Ip
     }
     ####Domain Statements
     if ($FileContent[$Count].type -eq "domain"){
-        Indicator-Domain
+        Content-Domain
     }
     if ($FileContent[$Count].type -eq "url"){
-        Indicator-Domain
+        Content-Domain
     }
     if ($FileContent[$Count].type -eq "email_address"){
-        Indicator-Domain
+        Content-Domain
     }
     <# This statement is getting hit every loop... Not sure why
     else {
