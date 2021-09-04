@@ -82,7 +82,7 @@ function Indicator-Hash {
             $FinalClasstype = " classtype`:`"$Classtype`"`;"
             $FinalClasstype = $FinalClasstype.Trim( )
         }
-        echo "alert ANY ANY <> ANY ANY ($FinalMessage $FinalContent $FinalReference $FinalClasstype sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
+        echo "alert ANY ANY <> ANY ANY ($FinalMessage $FinalContent $FinalReference $FinalClasstype sid:$SID; rev:1;)" >> $OutputFile`.rules
         $global:SID += 1
         $global:TotalHashes += 1
 }
@@ -120,7 +120,7 @@ function Indicator-Domain {
             $FinalClasstype = " classtype`:`"$Classtype`"`;"
             $FinalClasstype = $FinalClasstype.Trim( )
         }
-        echo "alert ANY ANY <> ANY ANY ($FinalMessage $FinalContent $FinalReference $FinalClasstype sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
+        echo "alert ANY ANY <> ANY ANY ($FinalMessage $FinalContent $FinalReference $FinalClasstype sid:$SID; rev:1;)" >> $OutputFile`.rules
         $global:SID += 1
         $global:TotalDomains += 1
 }
@@ -162,43 +162,37 @@ function Detect-Type {
     if ($FileContent[$Count].type -eq "ip-src") {
         $IPSRC = "ANY"
         $IPDST = "ANY"
-        $Type = @()
         $Content = @()
         $Message = @()
-        $Type += $FileContent[$Count].type
         $Content += $FileContent[$Count].indicator
         $Message += $FileContent[$Count].type
         $Reference += $FileContent[$Count].attribute_tag
         $IPSRC = $Content
-        echo "alert $IPSRC ANY <> $IPDST ANY (msg:`"$Message`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
+        echo "alert $IPSRC ANY <> $IPDST ANY (msg:`"$Message`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" >> $OutputFile`.rules
         $global:SID += 1
         $global:TotalIPs += 1
     }
     if ($FileContent[$Count].type -eq "ip-dst"){
         $IPSRC = "ANY"
         $IPDST = "ANY"
-        $Type = @()
         $Content = @()
         $Message = @()
-        $Type += $FileContent[$Count].type
         $Content += $FileContent[$Count].indicator
         $Message += $FileContent[$Count].type
         $Reference += $FileContent[$Count].attribute_tag
         $IPDST = $Content
-        echo "alert $IPSRC ANY <> $IPDST ANY (msg:`"$Message`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
+        echo "alert $IPSRC ANY <> $IPDST ANY (msg:`"$Message`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" >> $OutputFile`.rules
         $global:SID += 1
         $global:TotalIPs += 1
     }
     if ($FileContent[$Count].type -eq "ip_address"){
-        $Type = @()
         $Content = @()
         $Message = @()
-        $Type += $FileContent[$Count].type
         $Content += $FileContent[$Count].indicator
         $Message += $FileContent[$Count].type
         $Reference += $FileContent[$Count].attribute_tag
         $IPADDR = $Content
-        echo "alert ANY ANY <> $IPADDR ANY (msg:`"$Message`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
+        echo "alert ANY ANY <> $IPADDR ANY (msg:`"$Message`"; reference:$Reference; classtype:$Classtype; sid:$SID; rev:1;)" >> $OutputFile`.rules
         $global:SID += 1
         $global:TotalIPs += 1
     }
@@ -224,11 +218,7 @@ while ($Count -lt $length){
     Detect-Type
     $Count += 1
 }
-function Clean-File {
-    get-content $OutputFile`.rules | Where { $_.Replace("\S","") -ne "" } | Set-content $OutputFile`.rules
-}
 
-Clean-File
 Build-Results
 $elapsedTime = $(get-date) - $StartTime
 $totalTime = "{0:HH:mm:ss}" -f ([datetime]$elapsedTime.Ticks)
