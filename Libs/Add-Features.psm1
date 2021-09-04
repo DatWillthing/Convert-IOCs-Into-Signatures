@@ -22,7 +22,6 @@ Function Detect-Filetype {
     }
     elseif ($FileExten -eq ".csv") {
         #write-host "CSV yes, please!!"
-        #Check-Headers
     }
     elseif ($FileExten -eq "") {
         write-host "I did not detect a file extension. I need to know the file extension so that I can know what to work with. CSV is the easiest format for me."
