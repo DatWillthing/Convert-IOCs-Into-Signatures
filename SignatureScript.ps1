@@ -25,7 +25,27 @@ Input-File
 $StartTime = $(get-date)
 Detect-Filetype
 
+Function Check-Header {
+    #File-Unformatted-Content and File Header are created to make sure the correct values are grabbed...
+    $FileUnforContent = Get-Content $File
+    $FileHeader = Get-Content $File | select -First 1
+    if ($FileHeader -match "^column.*") {
+        $FileUnforContent = $FileUnforContent | Select-String -Pattern "$FileHeader" -NotMatch
+        $FileUnforContent | Out-File $File
+        get-content $File | Where { $_.Replace("\S","") -ne "" } | Set-content $File
+        Check-Header
+    }
+    elseif ($FileHeader -match ".*value.*") {
+        $FileHeader = $FileHeader.Replace('value','indicator')
+        $FileUnforContent[0] = $FileHeader
+        $FileUnforContent | Out-File $File
+    }
+}
+
+Check-Header
+
 $FileContent = import-csv -Path $File
+
 
 ##Variable Declaration##
 $Count = 0
@@ -41,46 +61,30 @@ function Indicator-Hash {
         $Content += $FileContent[$Count].indicator
         if ($Content -ne $null){
             $FinalContent = " content`:`"$Content`"`;"
+            $FinalContent = $FinalContent.Trim( )
         }
         $Message += $FileContent[$Count].type
         $Message += $FileContent[$Count].labels
+        $Message += $FileContent[$Count].message
         if ($Message -ne $null){
             $FinalMessage = " msg`:`"$Message`"`;"
+            $FinalMessage = $FinalMessage.Trim( )
         }
+        $Reference += $FileContent[$Count].attribute_tag
         $Reference += $FileContent[$Count].actors
         $Reference += $FileContent[$Count].reports
         if ($Reference -ne $null){
             $FinalReference = " reference`:`"$Reference`"`;"
         }
+
         $Classtype += $Classtype[$Count].malicous_confidence
         $Classtype += $Classtype[$Count].malware_families
         $Classtype += $Classtype[$Count].kill_chains
         if ($Classtype -ne $null){
             $FinalClasstype = " classtype`:`"$Classtype`"`;"
+            $FinalClasstype = $FinalClasstype.Trim( )
         }
         echo "alert ANY ANY <> ANY ANY ($FinalMessage $FinalContent $FinalReference $FinalClasstype sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
-        $global:SID += 1
-        $global:TotalHashes += 1
-}
-function Value-Hash {
-        $Type = @()
-        $Content = @()
-        $Message = @()
-        $Type += $FileContent[$Count].type
-        $Content += $FileContent[$Count].value
-        if ($Content -ne $null){
-            $FinalContent = " content`:`"$Content`"`;"
-        }
-        $Message += $FileContent[$Count].type
-        $Message += $FileContent[$Count].message
-        if ($Message -ne $null){
-            $FinalMessage = " msg`:`"$Message`"`;"
-        }
-        $Reference += $FileContent[$Count].attribute_tag
-        if ($Reference -ne $null){
-            $FinalReference = " reference`:`"$Reference`"`;"
-        }
-        echo "alert ANY ANY <> ANY ANY ($FinalMessage $FinalContent $FinalReference sid:$SID; rev:1;)" `n  >> $OutputFile`.rules
         $global:SID += 1
         $global:TotalHashes += 1
 }
@@ -92,7 +96,6 @@ function Indicator-Domain {
         $Classtype = @()
         $Type += $FileContent[$Count].type
         $Content += $FileContent[$Count].indicator
-	$Content += $FileContent[$Count].value
         if ($Content -ne $null){
             $FinalContent = " content`:`"$Content`"`;"
             $FinalContent = $FinalContent.Trim( )
@@ -101,9 +104,10 @@ function Indicator-Domain {
         $Message += $FileContent[$Count].labels
         if ($Message -ne $null){
             $FinalMessage = " msg`:`"$Message`"`;"
-            $FinalMessage = $FinalMessage.Trim( )
+            $FinalMessage -replace '[\u0032]', ''
             $FinalMessage = $FinalMessage.Trim( )
         }
+        $Reference += $FileContent[$Count].attribute_tag
         $Reference += $FileContent[$Count].actors
         $Reference += $FileContent[$Count].reports
         if ($Reference -ne $null){
@@ -136,25 +140,25 @@ function Detect-Type {
         Indicator-Hash
     }
     if ($FileContent[$Count].type -eq "sha1"){
-        Value-Hash
+        Indicator-Hash
    }
     if ($FileContent[$Count].type -eq "sha256"){
-        Value-Hash
+        Indicator-Hash
     }
     if ($FileContent[$Count].type -eq "sha384"){
-        Value-Hash
+        Indicator-Hash
     }
     if ($FileContent[$Count].type -eq "sha512"){
-        Value-Hash
+        Indicator-Hash
     }
     if ($FileContent[$Count].type -eq "authentihash"){
-        Value-Hash
+        Indicator-Hash
     }
     if ($FileContent[$Count].type -eq "ssdeep"){
-        Value-Hash
+        Indicator-Hash
     }
     if ($FileContent[$Count].type -eq "md5"){
-        Value-Hash
+        Indicator-Hash
     }
     ####IP Statements
     if ($FileContent[$Count].type -eq "ip-src") {
@@ -164,7 +168,6 @@ function Detect-Type {
         $Content = @()
         $Message = @()
         $Type += $FileContent[$Count].type
-        $Content += $FileContent[$Count].value
         $Content += $FileContent[$Count].indicator
         $Message += $FileContent[$Count].type
         $Reference += $FileContent[$Count].attribute_tag
@@ -180,7 +183,7 @@ function Detect-Type {
         $Content = @()
         $Message = @()
         $Type += $FileContent[$Count].type
-        $Content += $FileContent[$Count].value
+        $Content += $FileContent[$Count].indicator
         $Message += $FileContent[$Count].type
         $Reference += $FileContent[$Count].attribute_tag
         $IPDST = $Content
