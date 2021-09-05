@@ -41,7 +41,6 @@ Function Check-Header {
         Check-Header
     }
     elseif ($FileHeader -match ".*value.*") {
-        write-host "third if"
         $FileHeader = $FileHeader.Replace('value','indicator')
         $FileUnforContent[0] = $FileHeader
         $FileUnforContent | Out-File $File
@@ -139,8 +138,8 @@ function Source-Ip {
     Final-Reference
     Final-Classtype
     $FinalSID = "sid`:$global:SID`;rev`:1`;"
-    $IPSRC = $FileContent[$Count].indicator
-    echo "alert $IPSRC ANY <> ANY ANY ($FinalMessage$FinalReference$FinalClasstype$FinalSID)" >> $OutputFile`.rules
+    $SrcIP = $FileContent[$Count].indicator
+    echo "alert $SrcIP ANY <> ANY ANY ($FinalMessage$FinalReference$FinalClasstype$FinalSID)" >> $OutputFile`.rules
     $global:SID += 1
     $global:TotalIPs += 1
 }
@@ -153,12 +152,41 @@ function Destination-Ip {
     Final-Reference
     Final-Classtype
     $FinalSID = "sid`:$global:SID`;rev`:1`;"
-    $IPDST = $FileContent[$Count].indicator
-    echo "alert ANY ANY <> $IPDST ANY ($FinalMessage$FinalReference$FinalClasstype$FinalSID)" >> $OutputFile`.rules
+    $DstIP = $FileContent[$Count].indicator
+    echo "alert ANY ANY <> $DstIP ANY ($FinalMessage$FinalReference$FinalClasstype$FinalSID)" >> $OutputFile`.rules
     $global:SID += 1
     $global:TotalIPs += 1
 }
+<#
+function Content-Snort {
+    $Message = @()
+    $Reference = @()
+    $Classtype = @()
+    Final-Message
+    Final-Reference
+    Final-Classtype
+    $SnortRuleUnfor = $FileContent[$Count].indicator
+    $found = $SnortRuleUnfor -match '^alert\s([a-z]{2,3})\s(ANY)\s(ANY)\s->.*'
+    if ($found) {
+        $Proto = $matches[1]
+        $SrcIP = $matches[2]
+        $SrcPo = $matches[3]
+        write-host "alert $Proto $SrcIP $SrcPo"
+    }
+    <#
+    if ($matches[1] -ne $null){
+        write-host $matches[1]
+    }
+    #>
 
+
+    $FinalSID = "sid`:$global:SID`;rev`:1`;"    
+    $SnortRule = $SnortRuleUnfor
+    echo $SnortRule >> $OutputFile`.rules
+    $global:SID += 1
+    $global:TotalIPs += 1
+}
+#>
 ####################
 
 function Detect-Type {
@@ -187,9 +215,11 @@ function Detect-Type {
     elseif ($FileContent[$Count].type -eq "authentihash"){
         Content-Hash
     }
+    <#
     elseif ($FileContent[$Count].type -eq "ssdeep"){
         Content-Hash
     }
+    #>
     elseif ($FileContent[$Count].type -eq "md5"){
         Content-Hash
     }
@@ -213,6 +243,18 @@ function Detect-Type {
     elseif ($FileContent[$Count].type -eq "email_address"){
         Content-Domain
     }
+    elseif ($FileContent[$Count].type -eq "hostname"){
+        Content-Domain
+    }
+    elseif ($FileContent[$Count].type -eq "uri"){
+        Content-Domain
+    }
+    <#
+    elseif ($FileContent[$Count].type -eq "snort"){
+        #Snort rules have too much variety in makeup
+        Content-Snort
+    }
+    #>
     else {
         Unprocessed-Types
     }
