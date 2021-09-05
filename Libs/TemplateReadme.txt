@@ -12,6 +12,10 @@
 `n00 The Suricata SID range used is:   $FirstSID - $LastSID
 `n0000000000000000000000000000000000000000000000000000000000000000000000
 `n00
+`n00 The types that were not processed were:
+`n00 $global:TypesSkipped 
+`n00
+`n0000000000000000000000000000000000000000000000000000000000000000000000
 `n0000 Instructions 00000
 `n     Inside of the Signature Builder folder, a new folder called Results has been produced. This is where you will find the various types of signature files produced by the scripts.
 `n
