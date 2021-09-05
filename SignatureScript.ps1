@@ -30,16 +30,18 @@ Function Check-Header {
     $FileUnforContent = Get-Content $File
     $FileHeader = Get-Content $File | select -First 1
     if ($FileHeader -match "^column.*") {
+        write-host "first if"
         $FileUnforContent = $FileUnforContent | Select-String -Pattern "$FileHeader" -NotMatch
         $FileUnforContent | Out-File $File
         get-content $File | Where { $_.Replace("\S","") -ne "" } | Set-content $File
         Check-Header
     }
-    elseif ($FileHeader -match "") {
+    elseif ($FileHeader -eq "") {
         get-content $File | Where { $_.Replace("\S","") -ne "" } | Set-content $File
         Check-Header
     }
     elseif ($FileHeader -match ".*value.*") {
+        write-host "third if"
         $FileHeader = $FileHeader.Replace('value','indicator')
         $FileUnforContent[0] = $FileHeader
         $FileUnforContent | Out-File $File
