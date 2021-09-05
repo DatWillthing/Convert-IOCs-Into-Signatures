@@ -48,7 +48,15 @@ $FileContent = import-csv -Path $File
 ##Variable Declaration##
 $Count = 0
 $length = $FileContent.length
+$global:TypesSkipped = @()
 ####################
+
+function Unprocessed-Types {
+    if ($global:TypesSkipped -notcontains $FileContent[$Count].type){
+        $global:TypesSkipped += $FileContent[$Count].type
+    }
+    $global:TotalSkips += 1
+}
 
 function Final-Message {
     if ($FileContent[$Count].type -ne $null){$Message += $FileContent[$Count].type}
@@ -152,58 +160,56 @@ function Detect-Type {
     if ($FileContent[$Count].type -eq "hash_sha1"){
         Content-Hash
     }
-    if ($FileContent[$Count].type -eq "hash_sha256"){
+    elseif ($FileContent[$Count].type -eq "hash_sha256"){
         Content-Hash
     }
-    if ($FileContent[$Count].type -eq "hash_md5"){
+    elseif ($FileContent[$Count].type -eq "hash_md5"){
         Content-Hash
     }
-    if ($FileContent[$Count].type -eq "sha1"){
+    elseif ($FileContent[$Count].type -eq "sha1"){
         Content-Hash
    }
-    if ($FileContent[$Count].type -eq "sha256"){
+    elseif ($FileContent[$Count].type -eq "sha256"){
         Content-Hash
     }
-    if ($FileContent[$Count].type -eq "sha384"){
+    elseif ($FileContent[$Count].type -eq "sha384"){
         Content-Hash
     }
-    if ($FileContent[$Count].type -eq "sha512"){
+    elseif ($FileContent[$Count].type -eq "sha512"){
         Content-Hash
     }
-    if ($FileContent[$Count].type -eq "authentihash"){
+    elseif ($FileContent[$Count].type -eq "authentihash"){
         Content-Hash
     }
-    if ($FileContent[$Count].type -eq "ssdeep"){
+    elseif ($FileContent[$Count].type -eq "ssdeep"){
         Content-Hash
     }
-    if ($FileContent[$Count].type -eq "md5"){
+    elseif ($FileContent[$Count].type -eq "md5"){
         Content-Hash
     }
     ####IP Statements
-    if ($FileContent[$Count].type -eq "ip-src") {
+    elseif ($FileContent[$Count].type -eq "ip-src") {
         Source-Ip
     }
-    if ($FileContent[$Count].type -eq "ip-dst"){
+    elseif ($FileContent[$Count].type -eq "ip-dst"){
         Destination-Ip
     }
-    if ($FileContent[$Count].type -eq "ip_address"){
+    elseif ($FileContent[$Count].type -eq "ip_address"){
         Destination-Ip
     }
     ####Domain Statements
-    if ($FileContent[$Count].type -eq "domain"){
+    elseif ($FileContent[$Count].type -eq "domain"){
         Content-Domain
     }
-    if ($FileContent[$Count].type -eq "url"){
+    elseif ($FileContent[$Count].type -eq "url"){
         Content-Domain
     }
-    if ($FileContent[$Count].type -eq "email_address"){
+    elseif ($FileContent[$Count].type -eq "email_address"){
         Content-Domain
     }
-    <# This statement is getting hit every loop... Not sure why
     else {
-        $global:TotalSkips += 1
+        Unprocessed-Types
     }
-    #>
 }
 
 ##Iterates through the file and writes pertinent info to suricata rules##
@@ -211,6 +217,7 @@ while ($Count -lt $length){
     $global:FinalReference = $null
     $global:FinalClasstype = $null
     $global:FinalMessage = $null
+    $global:FinalContent = $null
     Detect-Type
     $Count += 1
 }
