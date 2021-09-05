@@ -35,6 +35,10 @@ Function Check-Header {
         get-content $File | Where { $_.Replace("\S","") -ne "" } | Set-content $File
         Check-Header
     }
+    elseif ($FileHeader -match "") {
+        get-content $File | Where { $_.Replace("\S","") -ne "" } | Set-content $File
+        Check-Header
+    }
     elseif ($FileHeader -match ".*value.*") {
         $FileHeader = $FileHeader.Replace('value','indicator')
         $FileUnforContent[0] = $FileHeader
