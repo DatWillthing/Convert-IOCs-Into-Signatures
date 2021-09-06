@@ -159,30 +159,36 @@ function Destination-Ip {
 }
 <#
 function Content-Snort {
+    $found = $null
     $Message = @()
     $Reference = @()
     $Classtype = @()
+    $Content = @()
     Final-Message
     Final-Reference
     Final-Classtype
     $SnortRuleUnfor = $FileContent[$Count].indicator
-    $found = $SnortRuleUnfor -match '^alert\s([a-z]{2,3})\s(ANY)\s(ANY)\s->.*'
+    $found = $SnortRuleUnfor -match '^alert\s([a-z]{2,3})\s([a-zA-Z0-9.$_]{3,15})\s([a-zA-Z0-9,\[\]]+)\s(->|<->)\s([a-zA-Z0-9.$_]{3,15})\s([a-zA-Z0-9,\[\]]+)\s'
     if ($found) {
         $Proto = $matches[1]
         $SrcIP = $matches[2]
         $SrcPo = $matches[3]
-        write-host "alert $Proto $SrcIP $SrcPo"
+        $Direc = $matches[4]
+        $DstIP = $matches[5]
+        #write-host "alert $Proto $SrcIP $SrcPo $Direc $DstIP $DstPo"
     }
-    <#
-    if ($matches[1] -ne $null){
-        write-host $matches[1]
+    $SnortRuleUnfor = $SnortRuleUnfor -replace '^alert\s([a-z]{2,3})\s([a-zA-Z0-9.$_]{3,15})\s([a-zA-Z0-9,\[\]]+)\s(->|<->)\s([a-zA-Z0-9.$_]{3,15})\s([a-zA-Z0-9,\[\]]+)\s',''
+    #write-host $SnortRuleUnfor
+    $found = $SnortRuleUnfor -match 'content:'
+    if ($found) {
+        $Content = $matches[1]
+        write-host "Content is $matches[1]"
+        #Results in "Content is System.Collections.Hashtable[1]"
     }
-    #>
-
-
     $FinalSID = "sid`:$global:SID`;rev`:1`;"    
     $SnortRule = $SnortRuleUnfor
-    echo $SnortRule >> $OutputFile`.rules
+    #echo $SnortRule >> $OutputFile`.rules
+    echo $Content >> $OutputFile`.rules
     $global:SID += 1
     $global:TotalIPs += 1
 }
