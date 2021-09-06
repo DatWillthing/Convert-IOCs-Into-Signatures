@@ -157,6 +157,42 @@ function Destination-Ip {
     $global:SID += 1
     $global:TotalIPs += 1
 }
+function Destination-IpAndPort {
+    $Message = @()
+    $Reference = @()
+    $Classtype = @()
+    Final-Message
+    Final-Reference
+    Final-Classtype
+    $FinalSID = "sid`:$global:SID`;rev`:1`;"
+    $DstIPAndPort = $FileContent[$Count].indicator
+    $found = $DstIPAndPort -match '^([a-zA-Z0-9.$_]{3,15})\|([a-zA-Z0-9,\[\]]+)$'
+    if ($found) {
+        $DstIP = $matches[1]
+        $DstPo = $matches[2]
+    }
+    echo "alert ANY ANY <> $DstIP $DstPo ($FinalMessage$FinalReference$FinalClasstype$FinalSID)" >> $OutputFile`.rules
+    $global:SID += 1
+    $global:TotalIPs += 1
+}
+function Source-IpAndPort {
+    $Message = @()
+    $Reference = @()
+    $Classtype = @()
+    Final-Message
+    Final-Reference
+    Final-Classtype
+    $FinalSID = "sid`:$global:SID`;rev`:1`;"
+    $SrcIPAndPort = $FileContent[$Count].indicator
+    $found = $SrcIPAndPort -match '^([a-zA-Z0-9.$_]{3,15})\|([a-zA-Z0-9,\[\]]+)$'
+    if ($found) {
+        $SrcIP = $matches[1]
+        $DstPo = $matches[2]
+    }
+    echo "alert $SrcIP ANY <> ANY $DstPo ($FinalMessage$FinalReference$FinalClasstype$FinalSID)" >> $OutputFile`.rules
+    $global:SID += 1
+    $global:TotalIPs += 1
+}
 <#
 function Content-Snort {
     $found = $null
@@ -168,7 +204,7 @@ function Content-Snort {
     Final-Reference
     Final-Classtype
     $SnortRuleUnfor = $FileContent[$Count].indicator
-    $found = $SnortRuleUnfor -match '^alert\s([a-z]{2,3})\s([a-zA-Z0-9.$_]{3,15})\s([a-zA-Z0-9,\[\]]+)\s(->|<->)\s([a-zA-Z0-9.$_]{3,15})\s([a-zA-Z0-9,\[\]]+)\s'
+    $found = $SnortRuleUnfor -match '^alert\s([a-z]{2,3})\s([a-zA-Z0-9.$_]{3,15})\s([a-zA-Z0-9,\[\]]+)\s(->|<>)\s([a-zA-Z0-9.$_]{3,15})\s([a-zA-Z0-9,\[\]]+)\s'
     if ($found) {
         $Proto = $matches[1]
         $SrcIP = $matches[2]
@@ -177,7 +213,7 @@ function Content-Snort {
         $DstIP = $matches[5]
         #write-host "alert $Proto $SrcIP $SrcPo $Direc $DstIP $DstPo"
     }
-    $SnortRuleUnfor = $SnortRuleUnfor -replace '^alert\s([a-z]{2,3})\s([a-zA-Z0-9.$_]{3,15})\s([a-zA-Z0-9,\[\]]+)\s(->|<->)\s([a-zA-Z0-9.$_]{3,15})\s([a-zA-Z0-9,\[\]]+)\s',''
+    $SnortRuleUnfor = $SnortRuleUnfor -replace '^alert\s([a-z]{2,3})\s([a-zA-Z0-9.$_]{3,15})\s([a-zA-Z0-9,\[\]]+)\s(->|<>)\s([a-zA-Z0-9.$_]{3,15})\s([a-zA-Z0-9,\[\]]+)\s',''
     #write-host $SnortRuleUnfor
     $found = $SnortRuleUnfor -match 'content:'
     if ($found) {
@@ -254,6 +290,12 @@ function Detect-Type {
     }
     elseif ($FileContent[$Count].type -eq "uri"){
         Content-Domain
+    }
+    elseif ($FileContent[$Count].type -eq "ip-dst|port"){
+        Destination-IpAndPort
+    }
+    elseif ($FileContent[$Count].type -eq "ip-src|port"){
+        Source-IpAndPort
     }
     <#
     elseif ($FileContent[$Count].type -eq "snort"){
