@@ -1,4 +1,5 @@
 ##Initial definitions for the Results Readme
+$global:WarningPreference = 'SilentlyContinue'
 Set-Variable -Name "File" -Value "$args" -Scope global
 Set-Variable -Name "TotalSigs" -Value 0 -Scope global
 Set-Variable -Name "TotalHashes" -Value 0 -Scope global
@@ -157,24 +158,6 @@ function Destination-Ip {
     $global:SID += 1
     $global:TotalIPs += 1
 }
-function Destination-IpAndPort {
-    $Message = @()
-    $Reference = @()
-    $Classtype = @()
-    Final-Message
-    Final-Reference
-    Final-Classtype
-    $FinalSID = "sid`:$global:SID`;rev`:1`;"
-    $DstIPAndPort = $FileContent[$Count].indicator
-    $found = $DstIPAndPort -match '^([a-zA-Z0-9.$_]{3,15})\|([a-zA-Z0-9,\[\]]+)$'
-    if ($found) {
-        $DstIP = $matches[1]
-        $DstPo = $matches[2]
-    }
-    echo "alert ANY ANY <> $DstIP $DstPo ($FinalMessage$FinalReference$FinalClasstype$FinalSID)" >> $OutputFile`.rules
-    $global:SID += 1
-    $global:TotalIPs += 1
-}
 function Source-IpAndPort {
     $Message = @()
     $Reference = @()
@@ -193,6 +176,47 @@ function Source-IpAndPort {
     $global:SID += 1
     $global:TotalIPs += 1
 }
+function Destination-IpAndPort {
+    $Message = @()
+    $Reference = @()
+    $Classtype = @()
+    Final-Message
+    Final-Reference
+    Final-Classtype
+    $FinalSID = "sid`:$global:SID`;rev`:1`;"
+    $DstIPAndPort = $FileContent[$Count].indicator
+    $found = $DstIPAndPort -match '^([a-zA-Z0-9.$_]{3,15})\|([a-zA-Z0-9,\[\]]+)$'
+    if ($found) {
+        $DstIP = $matches[1]
+        $DstPo = $matches[2]
+    }
+    echo "alert ANY ANY <> $DstIP $DstPo ($FinalMessage$FinalReference$FinalClasstype$FinalSID)" >> $OutputFile`.rules
+    $global:SID += 1
+    $global:TotalIPs += 1
+}
+function Destination-IpAndDomain {
+    $Message = @()
+    $Reference = @()
+    $Classtype = @()
+    Final-Message
+    Final-Reference
+    Final-Classtype
+    $FinalSID = "sid`:$global:SID`;rev`:1`;"
+    $DstIPAndDomain = $FileContent[$Count].indicator
+    $found = $DstIPAndDomain -match '^([^|]+)\|([a-zA-Z0-9.$_]{3,15})$'
+    if ($found) {
+        $Content = $matches[1]
+        $DstIP = $matches[2]
+    }
+    elseif ($Content -ne $null){
+        $FinalContent = "content`:`"$Content`"`;"
+        $FinalContent = $FinalContent.Trim( )
+    }
+    echo "alert ANY ANY <> $DstIP ANY ($FinalMessage$FinalContent$FinalReference$FinalClasstype$FinalSID)" >> $OutputFile`.rules
+    $global:SID += 1
+    $global:TotalIPs += 1
+}
+
 <#
 function Content-Snort {
     $found = $null
@@ -296,6 +320,9 @@ function Detect-Type {
     }
     elseif ($FileContent[$Count].type -eq "ip-src|port"){
         Source-IpAndPort
+    }
+    elseif ($FileContent[$Count].type -eq "domain|ip"){
+        Destination-IpAndDomain
     }
     <#
     elseif ($FileContent[$Count].type -eq "snort"){
