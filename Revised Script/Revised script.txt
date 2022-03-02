@@ -1,0 +1,23 @@
+BACKEND:
+Use existing workflow from previous script
+Detect headers for csv files
+Take user input from menu, assign variables, execute processing
+
+FRONTEND:
+Have a menu that parses through headers asking for user input based on headername and listing
+
+
+
+
+
+WORKFLOW:
+
+1 Read .CSV file into memory
+Escape characters that will break suricata
+1 Detect headers
+1 Output headers to terminal 
+Ask user for input on what to do with headers and data they contain
+(Pray the user doesnt fuck it up)
+Assign variables to headers based on user input
+Process data from the headers into suricata rules
+Output suricata rules to .txt
