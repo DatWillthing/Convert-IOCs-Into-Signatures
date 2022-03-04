@@ -1,6 +1,6 @@
 ﻿##Get CSV Filepath
 #$global:File = Read-Host "Input the full path to the signature file: "
-$File = "C:\users\dmss-n\Desktop\Script\IOC.csv"
+
 $FileContent = Import-Csv -Path $File
 
 ##Detect Headers
@@ -34,11 +34,11 @@ while ($Count1 -lt $Header.count){
         }
     }
     
-    $Input3 = (read-host "What would you like to do with this header? -" $Header[$Count1])
+    $Input3 = (read-host "What Suricata field does this header correlate to? `n 1: Message `n 2: Content `n 3: References `n 4: Threat Confidence `n" $Header[$Count1])
     
-   # if ($Input3 -eq "1"){
-   #     $MessageField = $Header[$Count1]
-   # }
+    if ($Input3 -eq "1"){
+        $MessageField = $Header[$Count1]
+    }
    # else {
    #     write-host "Invalid input, only use numbers 1-10"
    #     Continue
@@ -47,7 +47,9 @@ while ($Count1 -lt $Header.count){
 }
 
 ##Process User Input
+$Global:MessageList = @($filecontent | sort-object $global:MessageField | select-object -expandproperty $global:MessageField)
 $Global:typearray2 = @($filecontent | sort-object $global:Type | select-object -expandproperty $global:type)
+
 $Global:Count3 = 0
 while ($Count3 -lt $typearray2.count){
     if ($Global:typearray2[$Count3] -eq $Global:IPField){
@@ -59,9 +61,16 @@ while ($Count3 -lt $typearray2.count){
     $Global:Count3 += 1
 }
 
-$Global:Count4 = 0
-while ($Count4 -lt $filecontent.count){
+
+
+$Global:Count10 = 0
+while ($Count10 -lt $filecontent.count){
+    if ($Global:typearray2[$Global:Count10] -eq $Global:IPField){
+        echo "alert $IOCField[$Global:Count10] ANY <> ANY ANY (msg:"$Global:MessageList[$Global:Count10]"; $ReferenceField[$Global:Count10] $FinalClasstype[$Global:Count10] $FinalSID)" >> $OutputFile`.rules
+    }
+    else {
+        echo "ANY ANY <> ANY ANY (msg"$Global:MessageList[$Global:Count10]"; $IOCField[$Global:Count10] $ReferenceField[$Global:Count10] $FinalClasstype[$Global:Count10] $FinalSID)" >> $OutputFile`.rules
+    }
     
-    
-    $Count4 += 1
+    $Count10 += 1
 }
