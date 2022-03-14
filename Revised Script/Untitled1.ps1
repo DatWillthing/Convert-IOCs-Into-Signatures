@@ -34,7 +34,7 @@ while ($Count1 -lt $Header.count){
         }
     }
     
-    $Input3 = (read-host "What Suricata field does this header correlate to? `n 1: Message `n 2: Content `n 3: References `n 4: Threat Confidence `n" $Header[$Count1])
+    $Input3 = (read-host "What Suricata field does this header correlate to? `n 1: Message: A short description of what you are looking for. `n 2: Content: The values that you are actually trying to match. `n 3: References: Directs to places where information about the signature can be found (Ex:"reference: url, https://suricata.io") `n 4: Threat Confidence `n" $Header[$Count1])
     
     if ($Input3 -eq "1"){
         $MessageField = $Header[$Count1]
