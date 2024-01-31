@@ -15,7 +15,7 @@ while ($count -lt $mem.count){
     ##MD5 Rule needs proper rule field
     if ($mem[$count].type -eq "MD5") {
         $Value = $mem[$count].Value
-        add-content -path .\apt29.rules -value "alert ip any any <> any any (msg:`"MD5: $Value`";rev:1;sid:$sid;)"
+        add-content -path .\ioc.rules -value "alert ip any any <> any any (msg:`"MD5: $Value`";rev:1;sid:$sid;)"
     }
      if ($mem[$count].type -eq "URL") {
         $Initial = $mem[$count].Value
